@@ -86,14 +86,12 @@
 </head>
 <body>
 
-    <!-- HERO SECTION -->
     <div class="hero">
         <h1>NOTSWEATY</h1>
         <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan.</p>
         
-        <div id="globalStatus" class="global-loading">⚡ Waiting for Render Server to wake up (can take 60s)... <span id="loadCount">0</span>/21</div>
+        <div id="globalStatus" class="global-loading">⚡ Loading live clan statistics... <span id="loadCount">0</span>/21</div>
 
-        <!-- MANUAL SEARCH -->
         <div class="search-container">
             <div class="search-box">
                 <input type="text" id="customUsername" placeholder="Search any player..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
@@ -102,7 +100,6 @@
         </div>
     </div>
 
-    <!-- ROSTER / HIERARCHY -->
     <div class="roster-section">
         <div class="rank-title leader">👑 Clan Leader</div>
         <div id="leader-grid" class="grid grid-leader"></div>
@@ -114,7 +111,6 @@
         <div id="members-grid" class="grid grid-members"></div>
     </div>
 
-    <!-- STATS MODAL -->
     <div id="statsModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
@@ -142,8 +138,6 @@
 
     <script>
         const API_URL = "https://jartexapi2-0.onrender.com/api/stats/";
-        
-        // Proxy più stabile per risolvere blocchi CORS
         const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
         const clanRoles = {
@@ -182,67 +176,80 @@
             });
         }
 
-        async function fetchPlayerData(player) {
+        // Sistema di Fetch Indipendente con AbortController (Timeout rigido a 15 secondi)
+        async function fetchWithTimeout(player) {
             const primaryUrl = `${API_URL}${player}`;
             const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
 
-            // TENTATIVO 1: Nessun limite di tempo. Aspettiamo finché Render non risponde.
+            // TENTATIVO 1: Chiamata Diretta
             try {
-                const response = await fetch(primaryUrl);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s max
+                const response = await fetch(primaryUrl, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.warn(`[INFO] Connessione diretta a Render fallita, provo il proxy per ${player}`);
+                console.warn(`Direct fetch failed/timed out for ${player}`);
             }
 
-            // TENTATIVO 2: Proxy CORS
+            // TENTATIVO 2: Proxy Fallback
             try {
-                const response = await fetch(fallbackUrl);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s max
+                const response = await fetch(fallbackUrl, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.error(`[ERRORE] Impossibile caricare i dati per ${player}`, e);
+                console.error(`Proxy fetch failed/timed out for ${player}`);
             }
+
             return null;
         }
 
-        async function fetchAllClanStatsLive() {
+        // NUOVA LOGICA: Esecuzione asincrona sfasata (Non blocca la catena!)
+        function fetchAllClanStatsLive() {
             const statusDiv = document.getElementById("globalStatus");
-            
-            for (let i = 0; i < allPlayersList.length; i++) {
-                const player = allPlayersList[i];
-                
-                if (i === 0) {
-                    statusDiv.innerHTML = `⏳ Svegliando il server Render (può richiedere fino a 60 secondi)... pazienza!`;
-                } else {
+            statusDiv.innerHTML = `⏳ Svegliando il server Render e avviando il caricamento...`;
+
+            allPlayersList.forEach((player, index) => {
+                // Ogni giocatore si attiva esattamente (index * 1500) millisecondi dopo l'avvio della pagina
+                setTimeout(async () => {
+                    const card = document.getElementById(`card-${player.toLowerCase()}`);
+                    if (card) {
+                        // Cambia temporaneamente i trattini in clessidre per indicare il caricamento attivo di quel player
+                        card.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
+                    }
+
+                    const data = await fetchWithTimeout(player);
+                    
+                    if (data && data.stats) {
+                        liveClanData[player.toLowerCase()] = data;
+                        updatePlayerCardUI(player, data.stats);
+                    } else {
+                        showErrorOnCardUI(player);
+                    }
+
+                    loadedPlayers++;
+                    document.getElementById("loadCount").innerText = loadedPlayers;
                     statusDiv.innerHTML = `⚡ Loading live clan statistics... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
-                }
 
-                const data = await fetchPlayerData(player);
-                
-                if (data && data.stats) {
-                    liveClanData[player.toLowerCase()] = data;
-                    updatePlayerCardUI(player, data.stats);
-                } else {
-                    // SE FALLISCE, mostra "ERR" invece dei trattini, così sappiamo che ci ha provato ma è andato storto
-                    showErrorOnCardUI(player);
-                }
-
-                loadedPlayers++;
-                document.getElementById("loadCount").innerText = loadedPlayers;
-
-                // Aspetta 1 secondo pieno prima della prossima chiamata
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-
-            statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
-            statusDiv.style.borderColor = "var(--success-color)";
-            statusDiv.style.color = "var(--success-color)";
-            statusDiv.innerHTML = "✅ All clan statistics updated!";
-            setTimeout(() => { statusDiv.style.display = "none"; }, 5000);
+                    // Se tutti i timer hanno terminato l'esecuzione
+                    if (loadedPlayers === totalPlayers) {
+                        statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
+                        statusDiv.style.borderColor = "var(--success-color)";
+                        statusDiv.style.color = "var(--success-color)";
+                        statusDiv.innerHTML = "✅ Clan statistics synchronization complete!";
+                        setTimeout(() => { statusDiv.style.display = "none"; }, 5000);
+                    }
+                }, index * 1500); 
+            });
         }
 
         function updatePlayerCardUI(username, stats) {
             const card = document.getElementById(`card-${username.toLowerCase()}`);
             if (!card) return;
+            card.querySelectorAll(".val").forEach(span => span.classList.remove("error"));
+            
             card.querySelector(".style-wins").innerText = stats.wins || "0";
             card.querySelector(".style-wins").style.color = "var(--success-color)";
             card.querySelector(".style-fkills").innerText = stats.final_kills || "0";
@@ -302,8 +309,8 @@
             dataDiv.style.display = "none";
 
             try {
-                const data = await fetchPlayerData(username);
-                if (!data || data.errore) throw new Error(data?.messaggio || "Errore di rete o giocatore non trovato.");
+                const data = await fetchWithTimeout(username);
+                if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato o API non raggiungibile.");
 
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
