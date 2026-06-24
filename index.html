@@ -28,216 +28,49 @@
             align-items: center;
         }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            width: 100%;
-            max-width: 1000px;
-            text-align: center;
-            padding: 60px 20px 40px 20px;
-            box-sizing: border-box;
-        }
+        .hero { width: 100%; max-width: 1000px; text-align: center; padding: 60px 20px 40px 20px; box-sizing: border-box; }
+        .hero h1 { font-size: 3.5rem; color: var(--accent-color); margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 20px rgba(255, 71, 87, 0.4); }
+        .hero p.tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6; }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            color: var(--accent-color);
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
-        }
+        .search-container { width: 100%; max-width: 500px; margin: 0 auto 40px auto; }
+        .search-box { display: flex; gap: 10px; }
+        input { flex: 1; padding: 15px; border: 2px solid #1e2235; border-radius: 8px; background-color: var(--card-bg); color: white; font-size: 16px; outline: none; transition: border-color 0.3s; }
+        input:focus { border-color: var(--accent-color); }
 
-        .hero p.tagline {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-            line-height: 1.6;
-        }
-
-        /* --- SEARCH BOX --- */
-        .search-container {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto 40px auto;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 10px;
-        }
-
-        input {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #1e2235;
-            border-radius: 8px;
-            background-color: var(--card-bg);
-            color: white;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--accent-color);
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--accent-color);
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: transform 0.1s, background-color 0.3s;
-        }
-
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; background-color: var(--accent-color); color: white; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: transform 0.1s, background-color 0.3s; }
         .btn:hover { background-color: var(--accent-hover); }
         .btn:active { transform: scale(0.95); }
 
-        /* --- SYSTEM GLOBAL STATUS --- */
-        .global-loading {
-            background: rgba(255, 71, 87, 0.1);
-            border: 1px solid rgba(255, 71, 87, 0.3);
-            padding: 15px;
-            border-radius: 8px;
-            max-width: 500px;
-            margin: 0 auto 30px auto;
-            text-align: center;
-            font-size: 0.95rem;
-            color: #ff6b81;
-            transition: all 0.5s ease;
-        }
+        .global-loading { background: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255, 71, 87, 0.3); padding: 15px; border-radius: 8px; max-width: 500px; margin: 0 auto 30px auto; text-align: center; font-size: 0.95rem; color: #ff6b81; transition: all 0.5s ease; }
 
-        /* --- CLAN ROSTER & HIERARCHY --- */
-        .roster-section {
-            width: 100%;
-            max-width: 1000px;
-            padding: 0 20px 60px 20px;
-            box-sizing: border-box;
-        }
-
-        .rank-title {
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 50px 0 25px 0;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
+        .roster-section { width: 100%; max-width: 1000px; padding: 0 20px 60px 20px; box-sizing: border-box; }
+        .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 50px 0 25px 0; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .rank-title.leader { color: var(--gold); }
         .rank-title.commanders { color: var(--silver); }
         .rank-title.members { color: #54a0ff; }
+        .rank-title::before, .rank-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--text-muted), transparent); max-width: 150px; }
 
-        .rank-title::before, .rank-title::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
-            max-width: 150px;
-        }
-
-        .grid {
-            display: grid;
-            gap: 20px;
-        }
-
+        .grid { display: grid; gap: 20px; }
         .grid-leader { grid-template-columns: 1fr; max-width: 350px; margin: 0 auto; }
         .grid-commanders { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
         .grid-members { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 
-        .player-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 1px solid #1e2235;
-            transition: border-color 0.3s, transform 0.3s;
-        }
+        .player-card { background-color: var(--card-bg); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; border: 1px solid #1e2235; transition: border-color 0.3s, transform 0.3s; }
+        .player-card:hover { border-color: var(--accent-color); transform: translateY(-3px); }
+        .player-name { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; text-align: center; word-break: break-all; }
 
-        .player-card:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-3px);
-        }
+        .mini-stats { width: 100%; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; border-top: 1px solid #1e2235; padding-top: 10px; }
+        .mini-stats div { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .mini-stats span.val { color: white; font-weight: bold; }
+        .val.error { color: #ff4757 !important; }
 
-        .player-name {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: center;
-            word-break: break-all;
-        }
-
-        .mini-stats {
-            width: 100%;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            border-top: 1px solid #1e2235;
-            padding-top: 10px;
-        }
-
-        .mini-stats div {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-
-        .mini-stats span.val {
-            color: white;
-            font-weight: bold;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 11px;
-            background-color: #24293e;
-            border: 1px solid #383e56;
-            width: 100%;
-        }
+        .btn-sm { padding: 6px 12px; font-size: 11px; background-color: #24293e; border: 1px solid #383e56; width: 100%; }
         .btn-sm:hover { background-color: var(--accent-color); border-color: var(--accent-color); }
 
-        /* --- MODAL (POP-UP STATS) --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 500px;
-            border-radius: 12px;
-            padding: 30px;
-            box-sizing: border-box;
-            border-top: 4px solid var(--accent-color);
-            position: relative;
-            margin: 20px;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 30px; color: var(--text-muted);
-            cursor: pointer;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 1000; backdrop-filter: blur(5px); align-items: center; justify-content: center; }
+        .modal-content { background-color: var(--card-bg); width: 100%; max-width: 500px; border-radius: 12px; padding: 30px; box-sizing: border-box; border-top: 4px solid var(--accent-color); position: relative; margin: 20px; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 30px; color: var(--text-muted); cursor: pointer; }
         .close-modal:hover { color: white; }
-
         .modal h2 { margin-top: 0; text-transform: uppercase; color: var(--success-color); }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -253,20 +86,23 @@
 </head>
 <body>
 
+    <!-- HERO SECTION -->
     <div class="hero">
         <h1>NOTSWEATY</h1>
-        <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan. Domination is our standard in JartexNetwork BedWars.</p>
+        <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan.</p>
         
-        <div id="globalStatus" class="global-loading">⚡ Loading live clan statistics from Jartex API... <span id="loadCount">0</span>/21</div>
+        <div id="globalStatus" class="global-loading">⚡ Waiting for Render Server to wake up (can take 60s)... <span id="loadCount">0</span>/21</div>
 
+        <!-- MANUAL SEARCH -->
         <div class="search-container">
             <div class="search-box">
-                <input type="text" id="customUsername" placeholder="Search any player outside the clan..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
+                <input type="text" id="customUsername" placeholder="Search any player..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
                 <button class="btn" onclick="fetchLivePlayerStats(document.getElementById('customUsername').value)">Search</button>
             </div>
         </div>
     </div>
 
+    <!-- ROSTER / HIERARCHY -->
     <div class="roster-section">
         <div class="rank-title leader">👑 Clan Leader</div>
         <div id="leader-grid" class="grid grid-leader"></div>
@@ -278,18 +114,16 @@
         <div id="members-grid" class="grid grid-members"></div>
     </div>
 
+    <!-- STATS MODAL -->
     <div id="statsModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
-            <div id="modalLoading" class="loading">Fetching live data (6-8s)...</div>
+            <div id="modalLoading" class="loading">Fetching live data...</div>
             <div id="modalError" class="error-msg" style="display:none;"></div>
             
             <div id="modalData" style="display:none;">
                 <h2>Player: <span id="res-player" style="color: white;">-</span></h2>
                 <table>
-                    <thead>
-                        <tr><th>Statistic</th><th>Value</th></tr>
-                    </thead>
                     <tbody>
                         <tr><td>Wins</td><td id="stat-wins" class="highlight">-</td></tr>
                         <tr><td>Losses</td><td id="stat-losses">-</td></tr>
@@ -307,11 +141,11 @@
     </div>
 
     <script>
-        // Configurazione degli URL dell'API e del Proxy CORS
         const API_URL = "https://jartexapi2-0.onrender.com/api/stats/";
+        
+        // Proxy più stabile per risolvere blocchi CORS
         const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
-        // Definizione fissa dei Membri del Clan
         const clanRoles = {
             leader: ["Krishiv00"],
             commanders: ["Massimo00875", "Valerioita", "Noot_Penguin"],
@@ -323,7 +157,6 @@
         const allPlayersList = [...clanRoles.leader, ...clanRoles.commanders, ...clanRoles.members];
         const totalPlayers = allPlayersList.length;
 
-        // Costruisce la grafica con i segnaposto iniziali
         function buildInitialGrids() {
             generatePlaceholderGrid(clanRoles.leader, document.getElementById("leader-grid"));
             generatePlaceholderGrid(clanRoles.commanders, document.getElementById("commanders-grid"));
@@ -349,39 +182,36 @@
             });
         }
 
-        // Funzione singola di fetch con timeout e gestione Proxy
         async function fetchPlayerData(player) {
             const primaryUrl = `${API_URL}${player}`;
             const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
 
-            // Tentativo 1: Richiesta diretta (più veloce se l'API risponde subito)
+            // TENTATIVO 1: Nessun limite di tempo. Aspettiamo finché Render non risponde.
             try {
-                const response = await fetch(primaryUrl, { signal: AbortSignal.timeout(5000) });
+                const response = await fetch(primaryUrl);
                 if (response.ok) return await response.json();
             } catch (e) {
-                // In caso di errore CORS o timeout, passa automaticamente al proxy
+                console.warn(`[INFO] Connessione diretta a Render fallita, provo il proxy per ${player}`);
             }
 
-            // Tentativo 2: Richiesta tramite il Proxy CORS AllOrigins
+            // TENTATIVO 2: Proxy CORS
             try {
-                const response = await fetch(fallbackUrl, { signal: AbortSignal.timeout(8000) });
+                const response = await fetch(fallbackUrl);
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.error(`[API ERROR] Impossibile caricare i dati per ${player}`);
+                console.error(`[ERRORE] Impossibile caricare i dati per ${player}`, e);
             }
             return null;
         }
 
-        // CARICAMENTO IN CODA (Una richiesta al secondo per evitare blocchi)
         async function fetchAllClanStatsLive() {
             const statusDiv = document.getElementById("globalStatus");
             
             for (let i = 0; i < allPlayersList.length; i++) {
                 const player = allPlayersList[i];
                 
-                // Gestione avviso risveglio del server gratuito Render al primo giocatore
                 if (i === 0) {
-                    statusDiv.innerHTML = `⏳ Waking up Jartex API server (can take up to 30s)...`;
+                    statusDiv.innerHTML = `⏳ Svegliando il server Render (può richiedere fino a 60 secondi)... pazienza!`;
                 } else {
                     statusDiv.innerHTML = `⚡ Loading live clan statistics... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
                 }
@@ -391,24 +221,25 @@
                 if (data && data.stats) {
                     liveClanData[player.toLowerCase()] = data;
                     updatePlayerCardUI(player, data.stats);
+                } else {
+                    // SE FALLISCE, mostra "ERR" invece dei trattini, così sappiamo che ci ha provato ma è andato storto
+                    showErrorOnCardUI(player);
                 }
 
                 loadedPlayers++;
                 document.getElementById("loadCount").innerText = loadedPlayers;
 
-                // Ritardo artificiale di 1 secondo prima di richiedere il prossimo giocatore (Evita il Rate Limit)
+                // Aspetta 1 secondo pieno prima della prossima chiamata
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
 
-            // Completamento caricamento
             statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
             statusDiv.style.borderColor = "var(--success-color)";
             statusDiv.style.color = "var(--success-color)";
-            statusDiv.innerHTML = "✅ All clan statistics updated successfully!";
-            setTimeout(() => { statusDiv.style.display = "none"; }, 4000);
+            statusDiv.innerHTML = "✅ All clan statistics updated!";
+            setTimeout(() => { statusDiv.style.display = "none"; }, 5000);
         }
 
-        // Inserisce i dati estratti dentro le rispettive schede giocatore
         function updatePlayerCardUI(username, stats) {
             const card = document.getElementById(`card-${username.toLowerCase()}`);
             if (!card) return;
@@ -419,7 +250,16 @@
             card.querySelector(".style-wlr").innerText = stats.wlr || "0.00";
         }
 
-        // Gestione del pop-up con tutti i dettagli approfonditi
+        function showErrorOnCardUI(username) {
+            const card = document.getElementById(`card-${username.toLowerCase()}`);
+            if (!card) return;
+            const spans = card.querySelectorAll(".val");
+            spans.forEach(span => {
+                span.innerText = "ERR";
+                span.classList.add("error");
+            });
+        }
+
         function showPlayerDetails(username) {
             const lowerName = username.toLowerCase();
             if (liveClanData[lowerName]) {
@@ -429,16 +269,16 @@
                 document.getElementById("modalLoading").style.display = "none";
                 document.getElementById("modalError").style.display = "none";
                 
-                document.getElementById("res-player").innerText = d.giocatore;
-                document.getElementById("stat-wins").innerText = stats.wins;
-                document.getElementById("stat-losses").innerText = stats.losses;
-                document.getElementById("stat-wlr").innerText = stats.wlr;
-                document.getElementById("stat-final-kills").innerText = stats.final_kills;
+                document.getElementById("res-player").innerText = d.giocatore || username;
+                document.getElementById("stat-wins").innerText = stats.wins || "0";
+                document.getElementById("stat-losses").innerText = stats.losses || "0";
+                document.getElementById("stat-wlr").innerText = stats.wlr || "0";
+                document.getElementById("stat-final-kills").innerText = stats.final_kills || "0";
                 document.getElementById("stat-ws").innerText = stats.highest_ws || stats.highest_winstreak || "0";
-                document.getElementById("stat-beds").innerText = stats.beds_destroyed;
-                document.getElementById("stat-kills").innerText = stats.kills;
-                document.getElementById("stat-deaths").innerText = stats.deaths;
-                document.getElementById("stat-ratios").innerText = `KDR: ${stats.kdr} | FKDR: ${stats.fkdr}`;
+                document.getElementById("stat-beds").innerText = stats.beds_destroyed || "0";
+                document.getElementById("stat-kills").innerText = stats.kills || "0";
+                document.getElementById("stat-deaths").innerText = stats.deaths || "0";
+                document.getElementById("stat-ratios").innerText = `KDR: ${stats.kdr || 0} | FKDR: ${stats.fkdr || 0}`;
                 
                 document.getElementById("modalData").style.display = "block";
                 modal.style.display = "flex";
@@ -447,7 +287,6 @@
             }
         }
 
-        // Ricerca manuale per utenti esterni al clan
         async function fetchLivePlayerStats(username) {
             username = username.trim();
             if (!username) return;
@@ -464,7 +303,7 @@
 
             try {
                 const data = await fetchPlayerData(username);
-                if (!data || data.errore) throw new Error(data?.messaggio || "Player not found.");
+                if (!data || data.errore) throw new Error(data?.messaggio || "Errore di rete o giocatore non trovato.");
 
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
@@ -490,7 +329,6 @@
             document.getElementById("statsModal").style.display = "none";
         }
 
-        // Inizializzazione della pagina all'ingresso
         window.onload = function() {
             buildInitialGrids();
             fetchAllClanStatsLive();
