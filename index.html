@@ -320,7 +320,8 @@
 
         let liveClanData = {}; 
         let loadedPlayers = 0;
-        const totalPlayers = clanRoles.leader.length + clanRoles.commanders.length + clanRoles.members.length;
+        const allPlayersList = [...clanRoles.leader, ...clanRoles.commanders, ...clanRoles.members];
+        const totalPlayers = allPlayersList.length;
 
         // Costruisce la grafica con i segnaposto iniziali
         function buildInitialGrids() {
@@ -348,54 +349,63 @@
             });
         }
 
-        // Gestione intelligente dei tentativi di connessione (Diretto -> Proxy)
-        async function fetchWithRetry(player) {
+        // Funzione singola di fetch con timeout e gestione Proxy
+        async function fetchPlayerData(player) {
             const primaryUrl = `${API_URL}${player}`;
             const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
 
-            // Tentativo 1: Richiesta diretta all'API
+            // Tentativo 1: Richiesta diretta (più veloce se l'API risponde subito)
             try {
-                const response = await fetch(primaryUrl);
+                const response = await fetch(primaryUrl, { signal: AbortSignal.timeout(5000) });
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.log(`[Network] Chiamata diretta fallita per ${player}, provo il Proxy CORS...`);
+                // In caso di errore CORS o timeout, passa automaticamente al proxy
             }
 
-            // Tentativo 2: Richiesta tramite il Proxy AllOrigins (Risolve il problema del CORS)
+            // Tentativo 2: Richiesta tramite il Proxy CORS AllOrigins
             try {
-                const response = await fetch(fallbackUrl);
+                const response = await fetch(fallbackUrl, { signal: AbortSignal.timeout(8000) });
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.error(`[API ERROR] Impossibile contattare l'API per ${player}:`, e);
+                console.error(`[API ERROR] Impossibile caricare i dati per ${player}`);
             }
             return null;
         }
 
-        // Scarica i dati di tutti i membri in parallelo appena si apre il sito
+        // CARICAMENTO IN CODA (Una richiesta al secondo per evitare blocchi)
         async function fetchAllClanStatsLive() {
-            const allPlayers = [...clanRoles.leader, ...clanRoles.commanders, ...clanRoles.members];
+            const statusDiv = document.getElementById("globalStatus");
             
-            allPlayers.forEach(async (player) => {
-                const data = await fetchWithRetry(player);
+            for (let i = 0; i < allPlayersList.length; i++) {
+                const player = allPlayersList[i];
+                
+                // Gestione avviso risveglio del server gratuito Render al primo giocatore
+                if (i === 0) {
+                    statusDiv.innerHTML = `⏳ Waking up Jartex API server (can take up to 30s)...`;
+                } else {
+                    statusDiv.innerHTML = `⚡ Loading live clan statistics... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
+                }
+
+                const data = await fetchPlayerData(player);
                 
                 if (data && data.stats) {
                     liveClanData[player.toLowerCase()] = data;
                     updatePlayerCardUI(player, data.stats);
                 }
 
-                // Incrementa e aggiorna la barra di progresso sul sito
                 loadedPlayers++;
                 document.getElementById("loadCount").innerText = loadedPlayers;
-                
-                if (loadedPlayers >= totalPlayers) {
-                    const statusDiv = document.getElementById("globalStatus");
-                    statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
-                    statusDiv.style.borderColor = "var(--success-color)";
-                    statusDiv.style.color = "var(--success-color)";
-                    statusDiv.innerHTML = "✅ All clan statistics updated to the exact second!";
-                    setTimeout(() => { statusDiv.style.display = "none"; }, 4000);
-                }
-            });
+
+                // Ritardo artificiale di 1 secondo prima di richiedere il prossimo giocatore (Evita il Rate Limit)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            // Completamento caricamento
+            statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
+            statusDiv.style.borderColor = "var(--success-color)";
+            statusDiv.style.color = "var(--success-color)";
+            statusDiv.innerHTML = "✅ All clan statistics updated successfully!";
+            setTimeout(() => { statusDiv.style.display = "none"; }, 4000);
         }
 
         // Inserisce i dati estratti dentro le rispettive schede giocatore
@@ -453,8 +463,8 @@
             dataDiv.style.display = "none";
 
             try {
-                const data = await fetchWithRetry(username);
-                if (!data || data.errore) throw new Error(data?.messaggio || "Player not found or API sleeping.");
+                const data = await fetchPlayerData(username);
+                if (!data || data.errore) throw new Error(data?.messaggio || "Player not found.");
 
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
