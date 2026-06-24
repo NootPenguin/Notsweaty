@@ -98,6 +98,19 @@
         .btn:hover { background-color: var(--accent-hover); }
         .btn:active { transform: scale(0.95); }
 
+        /* --- SYSTEM GLOBAL STATUS --- */
+        .global-loading {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #ff6b81;
+        }
+
         /* --- CLAN ROSTER & HIERARCHY --- */
         .roster-section {
             width: 100%;
@@ -244,6 +257,9 @@
         <h1>NOTSWEATY</h1>
         <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan. Domination is our standard in JartexNetwork BedWars.</p>
         
+        <!-- STATUS DI CARICAMENTO GLOBALE -->
+        <div id="globalStatus" class="global-loading">⚡ Loading live clan statistics from Jartex API... <span id="loadCount">0</span>/21</div>
+
         <!-- MANUAL SEARCH -->
         <div class="search-container">
             <div class="search-box">
@@ -287,7 +303,7 @@
                         <tr><td>Beds Destroyed</td><td id="stat-beds">-</td></tr>
                         <tr><td>Regular Kills</td><td id="stat-kills">-</td></tr>
                         <tr><td>Regular Deaths</td><td id="stat-deaths">-</td></tr>
-                        <tr><td>Ratios</td><td id="stat-ratios">-</td></tr>
+                        <li>Ratios: <span id="stat-ratios" style="font-weight: bold; color: white;">-</span></li>
                     </tbody>
                 </table>
             </div>
@@ -295,70 +311,39 @@
     </div>
 
     <script>
-        // Collegamento automatico al tuo foglio di calcolo Google Sheets
-        const SHEET_ID = "1OQASixOrPhr4nSEIJ7svV-tM0CNceiq4FI-DftJssFk"; 
         const API_URL = "https://jartexapi2-0.onrender.com/api/stats/";
 
-        // Definizione dei Ruoli Ufficiali Notsweaty
+        // Definizione fissa della Struttura del Clan
         const clanRoles = {
             leader: ["Krishiv00"],
             commanders: ["Massimo00875", "Valerioita", "Noot_Penguin"],
             members: ["Vexral0", "Capta1nLeViI", "c41v", "grumen", "Whish3", "Ghostqx", "Kosticcc", "gingeler39", "Rock_Gamer", "_Mimero_", "I_quit", "iDesk76", "ManuelCCTV", "_Zenux", "14elo_", "luca05", "Thaazin"]
         };
 
-        let cachedSheetData = {}; 
+        // Qui salveremo tutti i dati scaricati live all'ingresso
+        let liveClanData = {}; 
+        let loadedPlayers = 0;
+        const totalPlayers = clanRoles.leader.length + clanRoles.commanders.length + clanRoles.members.length;
 
-        // Scarica i dati dal foglio Google per popolare all'istante le schede all'avvio
-        async function loadClanData() {
-            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-            
-            try {
-                const response = await fetch(url);
-                const text = await response.text();
-                const json = JSON.parse(text.substr(47).slice(0, -2));
-                const rows = json.table.rows;
-
-                rows.forEach(row => {
-                    if(!row.c[0]) return;
-                    const name = row.c[0].v.trim();
-                    cachedSheetData[name.toLowerCase()] = {
-                        giocatore: name,
-                        wins: row.c[1] ? row.c[1].v : "0",
-                        losses: row.c[2] ? row.c[2].v : "0",
-                        wlr: row.c[3] ? row.c[3].v : "0",
-                        final_kills: row.c[4] ? row.c[4].v : "0",
-                        ws: row.c[5] ? row.c[5].v : "0",
-                        beds: row.c[6] ? row.c[6].v : "0",
-                        kills: row.c[7] ? row.c[7].v : "0",
-                        deaths: row.c[8] ? row.c[8].v : "0",
-                        kdr: row.c[9] ? row.c[9].v : "0",
-                        fkdr: row.c[10] ? row.c[10].v : "0"
-                    };
-                });
-            } catch (e) {
-                console.error("Errore nel recupero dati da Sheets, uso fallback.", e);
-            }
-
-            // Generazione automatica dei riquadri grafici
-            generateGrid("leader", clanRoles.leader, document.getElementById("leader-grid"));
-            generateGrid("commanders", clanRoles.commanders, document.getElementById("commanders-grid"));
-            generateGrid("members", clanRoles.members, document.getElementById("members-grid"));
+        // Genera inizialmente i riquadri vuoti per non far aspettare l'utente
+        function buildInitialGrids() {
+            generatePlaceholderGrid(clanRoles.leader, document.getElementById("leader-grid"));
+            generatePlaceholderGrid(clanRoles.commanders, document.getElementById("commanders-grid"));
+            generatePlaceholderGrid(clanRoles.members, document.getElementById("members-grid"));
         }
 
-        function generateGrid(role, playerList, container) {
+        function generatePlaceholderGrid(playerList, container) {
             container.innerHTML = "";
             playerList.forEach(player => {
-                const lowerName = player.toLowerCase();
-                const s = cachedSheetData[lowerName] || { wins: "0", final_kills: "0", wlr: "0.00" };
-
                 const card = document.createElement("div");
                 card.className = "player-card";
+                card.id = `card-${player.toLowerCase()}`;
                 card.innerHTML = `
                     <div class="player-name">${player}</div>
                     <div class="mini-stats">
-                        <div><span>Wins:</span><span class="val" style="color:var(--success-color)">${s.wins}</span></div>
-                        <div><span>Final Kills:</span><span class="val" style="color:var(--accent-color)">${s.final_kills}</span></div>
-                        <div><span>WLR:</span><span class="val">${s.wlr}</span></div>
+                        <div><span>Wins:</span><span class="val style-wins">-</span></div>
+                        <div><span>Final Kills:</span><span class="val style-fkills">-</span></div>
+                        <div><span>WLR:</span><span class="val style-wlr">-</span></div>
                     </div>
                     <button class="btn btn-sm" onclick="showPlayerDetails('${player}')">More Stats</button>
                 `;
@@ -366,25 +351,68 @@
             });
         }
 
-        // Mostra il pop-up: istantaneo se fa parte del clan, in caricamento se esterno
+        // Funzione asincrona che bombarda l'API all'avvio per prendere i dati di TUTTI contemporaneamente
+        async function fetchAllClanStatsLive() {
+            const allPlayers = [...clanRoles.leader, ...clanRoles.commanders, ...clanRoles.members];
+            
+            // Scarica i dati in parallelo (velocissimo!)
+            allPlayers.forEach(async (player) => {
+                try {
+                    const response = await fetch(`${API_URL}${player}`);
+                    const data = await response.json();
+                    
+                    if (data && data.stats) {
+                        liveClanData[player.toLowerCase()] = data;
+                        // Aggiorna istantaneamente la card di quel giocatore sullo schermo
+                        updatePlayerCardUI(player, data.stats);
+                    }
+                } catch (e) {
+                    console.error(`Errore caricamento live per ${player}:`, e);
+                } finally {
+                    loadedPlayers++;
+                    document.getElementById("loadCount").innerText = loadedPlayers;
+                    if (loadedPlayers >= totalPlayers) {
+                        document.getElementById("globalStatus").style.backgroundColor = "rgba(46, 213, 115, 0.1)";
+                        document.getElementById("globalStatus").style.borderColor = "var(--success-color)";
+                        document.getElementById("globalStatus").style.color = "var(--success-color)";
+                        document.getElementById("globalStatus").innerHTML = "✅ All clan statistics updated to the exact second!";
+                        setTimeout(() => { document.getElementById("globalStatus").style.display = "none"; }, 4000);
+                    }
+                }
+            });
+        }
+
+        // Inietta i dati live nella card specifica non appena la chiamata API risponde
+        function updatePlayerCardUI(username, stats) {
+            const card = document.getElementById(`card-${username.toLowerCase()}`);
+            if (!card) return;
+            card.querySelector(".style-wins").innerText = stats.wins || "0";
+            card.querySelector(".style-wins").style.color = "var(--success-color)";
+            card.querySelector(".style-fkills").innerText = stats.final_kills || "0";
+            card.querySelector(".style-fkills").style.color = "var(--accent-color)";
+            card.querySelector(".style-wlr").innerText = stats.wlr || "0.00";
+        }
+
+        // Mostra il pop-up dettagliato (istantaneo se è del clan ed è già stato scaricato)
         function showPlayerDetails(username) {
             const lowerName = username.toLowerCase();
-            if (cachedSheetData[lowerName]) {
-                const d = cachedSheetData[lowerName];
+            if (liveClanData[lowerName]) {
+                const d = liveClanData[lowerName];
+                const stats = d.stats;
                 const modal = document.getElementById("statsModal");
                 document.getElementById("modalLoading").style.display = "none";
                 document.getElementById("modalError").style.display = "none";
                 
                 document.getElementById("res-player").innerText = d.giocatore;
-                document.getElementById("stat-wins").innerText = d.wins;
-                document.getElementById("stat-losses").innerText = d.losses;
-                document.getElementById("stat-wlr").innerText = d.wlr;
-                document.getElementById("stat-final-kills").innerText = d.final_kills;
-                document.getElementById("stat-ws").innerText = d.ws;
-                document.getElementById("stat-beds").innerText = d.beds;
-                document.getElementById("stat-kills").innerText = d.kills;
-                document.getElementById("stat-deaths").innerText = d.deaths;
-                document.getElementById("stat-ratios").innerText = `KDR: ${d.kdr} | FKDR: ${d.fkdr}`;
+                document.getElementById("stat-wins").innerText = stats.wins;
+                document.getElementById("stat-losses").innerText = stats.losses;
+                document.getElementById("stat-wlr").innerText = stats.wlr;
+                document.getElementById("stat-final-kills").innerText = stats.final_kills;
+                document.getElementById("stat-ws").innerText = stats.highest_ws || stats.highest_winstreak || "0";
+                document.getElementById("stat-beds").innerText = stats.beds_destroyed;
+                document.getElementById("stat-kills").innerText = stats.kills;
+                document.getElementById("stat-deaths").innerText = stats.deaths;
+                document.getElementById("stat-ratios").innerText = `KDR: ${stats.kdr} | FKDR: ${stats.fkdr}`;
                 
                 document.getElementById("modalData").style.display = "block";
                 modal.style.display = "flex";
@@ -393,7 +421,7 @@
             }
         }
 
-        // Recupero statistiche real-time via API per esterni (6-8 secondi)
+        // Cerca player esterni via barra di ricerca
         async function fetchLivePlayerStats(username) {
             username = username.trim();
             if (!username) return;
@@ -419,7 +447,7 @@
                 document.getElementById("stat-losses").innerText = data.stats.losses;
                 document.getElementById("stat-wlr").innerText = data.stats.wlr;
                 document.getElementById("stat-final-kills").innerText = data.stats.final_kills;
-                document.getElementById("stat-ws").innerText = data.stats.highest_ws;
+                document.getElementById("stat-ws").innerText = data.stats.highest_ws || data.stats.highest_winstreak || "0";
                 document.getElementById("stat-beds").innerText = data.stats.beds_destroyed;
                 document.getElementById("stat-kills").innerText = data.stats.kills;
                 document.getElementById("stat-deaths").innerText = data.stats.deaths;
@@ -438,7 +466,11 @@
             document.getElementById("statsModal").style.display = "none";
         }
 
-        window.onload = loadClanData;
+        // All'apertura della pagina esegue subito la logica di caricamento istantaneo
+        window.onload = function() {
+            buildInitialGrids();
+            fetchAllClanStatsLive();
+        };
     </script>
 </body>
 </html>
