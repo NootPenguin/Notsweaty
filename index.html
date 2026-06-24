@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clan Notsweaty - Statistiche Jartex</title>
+    <title>NOTSWEATY CLAN - Official Hub</title>
     <style>
         :root {
-            --bg-color: #0f111a;
-            --card-bg: #1e2235;
+            --bg-color: #0a0c14;
+            --card-bg: #131722;
             --accent-color: #ff4757;
+            --accent-hover: #ff6b81;
             --text-color: #ffffff;
-            --text-muted: #a0a5c1;
+            --text-muted: #7e84a3;
             --success-color: #2ed573;
+            --gold: #ffa502;
+            --silver: #ced6e0;
         }
 
         body {
@@ -19,41 +22,54 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .container {
+        /* --- HERO SECTION --- */
+        .hero {
             width: 100%;
-            max-width: 600px;
-            margin-top: 50px;
+            max-width: 1000px;
             text-align: center;
+            padding: 60px 20px 40px 20px;
+            box-sizing: border-box;
         }
 
-        h1 {
+        .hero h1 {
+            font-size: 3.5rem;
             color: var(--accent-color);
-            margin-bottom: 5px;
+            margin: 0 0 10px 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
         }
 
-        p.subtitle {
+        .hero p.tagline {
+            font-size: 1.2rem;
             color: var(--text-muted);
-            margin-bottom: 30px;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            line-height: 1.6;
+        }
+
+        /* --- SEARCH BOX --- */
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 40px auto;
         }
 
         .search-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 30px;
         }
 
         input {
             flex: 1;
             padding: 15px;
-            border: 2px solid #2f3542;
+            border: 2px solid #1e2235;
             border-radius: 8px;
             background-color: var(--card-bg);
             color: white;
@@ -66,157 +82,259 @@
             border-color: var(--accent-color);
         }
 
-        button {
-            padding: 15px 25px;
+        .btn {
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
             background-color: var(--accent-color);
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
+            text-transform: uppercase;
             transition: transform 0.1s, background-color 0.3s;
         }
 
-        button:hover {
-            background-color: #ff6b81;
-        }
+        .btn:hover { background-color: var(--accent-hover); }
+        .btn:active { transform: scale(0.95); }
 
-        button:active {
-            transform: scale(0.95);
-        }
-
-        .loading {
-            display: none;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-top: 20px;
-        }
-
-        .error-msg {
-            display: none;
-            color: var(--accent-color);
-            background: rgba(255, 71, 87, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--accent-color);
-            margin-top: 20px;
-        }
-
-        .stats-card {
-            display: none;
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            text-align: left;
-            margin-top: 20px;
-            border-top: 4px solid var(--accent-color);
-        }
-
-        .stats-card h2 {
-            margin-top: 0;
-            color: var(--success-color);
-            text-transform: uppercase;
-        }
-
-        table {
+        /* --- CLAN ROSTER & HIERARCHY --- */
+        .roster-section {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+            max-width: 900px;
+            padding: 0 20px 60px 20px;
+            box-sizing: border-box;
         }
 
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #2f3542;
+        .rank-title {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 40px 0 20px 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        th {
-            color: var(--text-muted);
-            text-align: left;
-            font-weight: 600;
+        .rank-title.leader { color: var(--gold); }
+        .rank-title.commanders { color: var(--silver); }
+        .rank-title.members { color: var(--text-color); }
+
+        .rank-title::before, .rank-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
+            max-width: 150px;
         }
 
-        td {
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-leader { grid-template-columns: 1fr; max-width: 350px; margin: 0 auto; }
+        .grid-commanders { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .grid-members { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+        .player-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #1e2235;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .player-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .player-name {
+            font-size: 1.2rem;
             font-weight: bold;
-            text-align: right;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
-        td:first-child, th:first-child {
-            text-align: left;
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+            background-color: #24293e;
+            border: 1px solid #383e56;
+        }
+        .btn-sm:hover { background-color: var(--accent-color); border-color: var(--accent-color); }
+
+        /* --- MODAL (POP-UP STATS) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
         }
 
-        .highlight {
-            color: var(--accent-color);
+        .modal-content {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 30px;
+            box-sizing: border-box;
+            border-top: 4px solid var(--accent-color);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 30px; color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close-modal:hover { color: white; }
+
+        .modal h2 { margin-top: 0; text-transform: uppercase; color: var(--success-color); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; border-bottom: 1px solid #2f3542; }
+        th { color: var(--text-muted); text-align: left; font-weight: 600; }
+        td { font-weight: bold; text-align: right; }
+        td:first-child, th:first-child { text-align: left; }
+        .highlight { color: var(--accent-color); }
+
+        .loading { color: var(--text-muted); font-style: italic; text-align: center; padding: 20px 0; }
+        .error-msg { color: var(--accent-color); background: rgba(255, 71, 87, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--accent-color); margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Clan Notsweaty</h1>
-        <p class="subtitle">Tracker Statistiche BedWars - JartexNetwork</p>
+    <div class="hero">
+        <h1>NOTSWEATY</h1>
+        <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan. Domination is not an option, it's our standard in JartexNetwork BedWars.</p>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="customUsername" placeholder="Search any player outside the clan..." onkeydown="if(event.key === 'Enter') fetchPlayerStats(document.getElementById('customUsername').value)">
+                <button class="btn" onclick="fetchPlayerStats(document.getElementById('customUsername').value)">Search</button>
+            </div>
+        </div>
+    </div>
 
-        <div class="search-box">
-            <input type="text" id="username" placeholder="Inserisci il nickname del giocatore..." onkeydown="if(event.key === 'Enter') cercaGiocatore()">
-            <button onclick="cercaGiocatore()">CERCA</button>
+    <div class="roster-section">
+        
+        <div class="rank-title leader">👑 Clan Leader</div>
+        <div class="grid grid-leader">
+            <div class="player-card">
+                <div class="player-name">Noot_Penguin</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('Noot_Penguin')">View Stats</button>
+            </div>
         </div>
 
-        <div id="loading" class="loading">Inizializzazione browser headless in corso... Attendi circa 6-8 secondi...</div>
-        <div id="error" class="error-msg"></div>
+        <div class="rank-title commanders">⚔️ Commanders</div>
+        <div class="grid grid-commanders">
+            <div class="player-card">
+                <div class="player-name">CommanderNick1</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('CommanderNick1')">View Stats</button>
+            </div>
+            <div class="player-card">
+                <div class="player-name">CommanderNick2</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('CommanderNick2')">View Stats</button>
+            </div>
+            <div class="player-card">
+                <div class="player-name">CommanderNick3</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('CommanderNick3')">View Stats</button>
+            </div>
+        </div>
 
-        <div id="statsCard" class="stats-card">
-            <h2>Giocatore: <span id="res-player" style="color: white;">-</span></h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Statistica</th>
-                        <th>Valore</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Vittorie (Wins)</td><td id="stat-wins" class="highlight">-</td></tr>
-                    <tr><td>Sconfitte (Losses)</td><td id="stat-losses">-</td></tr>
-                    <tr><td>WLR (Win/Loss Ratio)</td><td id="stat-wlr">-</td></tr>
-                    <tr><td>Uccisioni Finali (Final Kills)</td><td id="stat-final-kills" class="highlight">-</td></tr>
-                    <tr><td>Winstreak Maggiore</td><td id="stat-ws">-</td></tr>
-                    <tr><td>Letti Distrutti (Beds)</td><td id="stat-beds">-</td></tr>
-                    <tr><td>Kills Normali</td><td id="stat-kills">-</td></tr>
-                    <tr><td>Deaths Normali</td><td id="stat-deaths">-</td></tr>
-                    <tr><td>KDR / FKDR</td><td id="stat-ratios">-</td></tr>
-                </tbody>
-            </table>
+        <div class="rank-title members">🛡️ Clan Members</div>
+        <div class="grid grid-members">
+            <div class="player-card">
+                <div class="player-name">MemberNick1</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('MemberNick1')">View Stats</button>
+            </div>
+            <div class="player-card">
+                <div class="player-name">MemberNick2</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('MemberNick2')">View Stats</button>
+            </div>
+            <div class="player-card">
+                <div class="player-name">MemberNick3</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('MemberNick3')">View Stats</button>
+            </div>
+            <div class="player-card">
+                <div class="player-name">MemberNick4</div>
+                <button class="btn btn-sm" onclick="fetchPlayerStats('MemberNick4')">View Stats</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="statsModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
+            
+            <div id="modalLoading" class="loading">Waking up headless browser... Fetching Jartex data (6-8s)...</div>
+            <div id="modalError" class="error-msg" style="display:none;"></div>
+            
+            <div id="modalData" style="display:none;">
+                <h2>Player: <span id="res-player" style="color: white;">-</span></h2>
+                <table>
+                    <thead>
+                        <tr><th>Statistic</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Wins</td><td id="stat-wins" class="highlight">-</td></tr>
+                        <tr><td>Losses</td><td id="stat-losses">-</td></tr>
+                        <tr><td>WLR (Win/Loss)</td><td id="stat-wlr">-</td></tr>
+                        <tr><td>Final Kills</td><td id="stat-final-kills" class="highlight">-</td></tr>
+                        <tr><td>Highest Winstreak</td><td id="stat-ws">-</td></tr>
+                        <tr><td>Beds Destroyed</td><td id="stat-beds">-</td></tr>
+                        <tr><td>Regular Kills</td><td id="stat-kills">-</td></tr>
+                        <tr><td>Regular Deaths</td><td id="stat-deaths">-</td></tr>
+                        <tr><td>Ratios</td><td id="stat-ratios">-</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
-        // URL ufficiale della tua API su Render
         const API_URL = "https://jartexapi2-0.onrender.com/api/stats/";
 
-        async function cercaGiocatore() {
-            const input = document.getElementById("username");
-            const username = input.value.trim();
-            
-            const loading = document.getElementById("loading");
-            const errorDiv = document.getElementById("error");
-            const statsCard = document.getElementById("statsCard");
-
+        async function fetchPlayerStats(username) {
+            username = username.trim();
             if (!username) return;
 
-            // Reset interfaccia
+            const modal = document.getElementById("statsModal");
+            const loading = document.getElementById("modalLoading");
+            const errorDiv = document.getElementById("modalError");
+            const dataDiv = document.getElementById("modalData");
+
+            // Open Modal and Reset State
+            modal.style.display = "flex";
             loading.style.display = "block";
             errorDiv.style.display = "none";
-            statsCard.style.display = "none";
+            dataDiv.style.display = "none";
 
             try {
                 const response = await fetch(`${API_URL}${username}`);
                 const data = await response.json();
 
                 if (data.errore) {
-                    throw new Error(data.messaggio || "Impossibile recuperare i dati.");
+                    throw new Error(data.messaggio || "Player not found or inactive on Jartex.");
                 }
 
-                // Popoliamo la tabella con i dati JSON dell'API
+                // Fill Table Data
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
                 document.getElementById("stat-losses").innerText = data.stats.losses;
@@ -228,14 +346,17 @@
                 document.getElementById("stat-deaths").innerText = data.stats.deaths;
                 document.getElementById("stat-ratios").innerText = `KDR: ${data.stats.kdr} | FKDR: ${data.stats.fkdr}`;
 
-                // Mostra la scheda compilata
-                statsCard.style.display = "block";
-            } catch (err) {
-                errorDiv.innerText = err.message || "Errore di connessione con l'API di Render.";
-                errorDiv.style.display = "block";
-            } finally {
                 loading.style.display = "none";
+                dataDiv.style.display = "block";
+            } catch (err) {
+                loading.style.display = "none";
+                errorDiv.innerText = err.message;
+                errorDiv.style.display = "block";
             }
+        }
+
+        function closeModal(event) {
+            document.getElementById("statsModal").style.display = "none";
         }
     </script>
 </body>
