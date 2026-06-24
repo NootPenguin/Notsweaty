@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clan Notsweaty - Statistiche Jartex</title>
+    <style>
+        :root {
+            --bg-color: #0f111a;
+            --card-bg: #1e2235;
+            --accent-color: #ff4757;
+            --text-color: #ffffff;
+            --text-muted: #a0a5c1;
+            --success-color: #2ed573;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #2f3542;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff6b81;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .loading {
+            display: none;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        .error-msg {
+            display: none;
+            color: var(--accent-color);
+            background: rgba(255, 71, 87, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-color);
+            margin-top: 20px;
+        }
+
+        .stats-card {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            text-align: left;
+            margin-top: 20px;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .stats-card h2 {
+            margin-top: 0;
+            color: var(--success-color);
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #2f3542;
+        }
+
+        th {
+            color: var(--text-muted);
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Clan Notsweaty</h1>
+        <p class="subtitle">Tracker Statistiche BedWars - JartexNetwork</p>
+
+        <div class="search-box">
+            <input type="text" id="username" placeholder="Inserisci il nickname del giocatore..." onkeydown="if(event.key === 'Enter') cercaGiocatore()">
+            <button onclick="cercaGiocatore()">CERCA</button>
+        </div>
+
+        <div id="loading" class="loading">Inizializzazione browser headless in corso... Attendi circa 6-8 secondi...</div>
+        <div id="error" class="error-msg"></div>
+
+        <div id="statsCard" class="stats-card">
+            <h2>Giocatore: <span id="res-player" style="color: white;">-</span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Statistica</th>
+                        <th>Valore</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Vittorie (Wins)</td><td id="stat-wins" class="highlight">-</td></tr>
+                    <tr><td>Sconfitte (Losses)</td><td id="stat-losses">-</td></tr>
+                    <tr><td>WLR (Win/Loss Ratio)</td><td id="stat-wlr">-</td></tr>
+                    <tr><td>Uccisioni Finali (Final Kills)</td><td id="stat-final-kills" class="highlight">-</td></tr>
+                    <tr><td>Winstreak Maggiore</td><td id="stat-ws">-</td></tr>
+                    <tr><td>Letti Distrutti (Beds)</td><td id="stat-beds">-</td></tr>
+                    <tr><td>Kills Normali</td><td id="stat-kills">-</td></tr>
+                    <tr><td>Deaths Normali</td><td id="stat-deaths">-</td></tr>
+                    <tr><td>KDR / FKDR</td><td id="stat-ratios">-</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // URL ufficiale della tua API su Render
+        const API_URL = "https://jartexapi2-0.onrender.com/api/stats/";
+
+        async function cercaGiocatore() {
+            const input = document.getElementById("username");
+            const username = input.value.trim();
+            
+            const loading = document.getElementById("loading");
+            const errorDiv = document.getElementById("error");
+            const statsCard = document.getElementById("statsCard");
+
+            if (!username) return;
+
+            // Reset interfaccia
+            loading.style.display = "block";
+            errorDiv.style.display = "none";
+            statsCard.style.display = "none";
+
+            try {
+                const response = await fetch(`${API_URL}${username}`);
+                const data = await response.json();
+
+                if (data.errore) {
+                    throw new Error(data.messaggio || "Impossibile recuperare i dati.");
+                }
+
+                // Popoliamo la tabella con i dati JSON dell'API
+                document.getElementById("res-player").innerText = data.giocatore;
+                document.getElementById("stat-wins").innerText = data.stats.wins;
+                document.getElementById("stat-losses").innerText = data.stats.losses;
+                document.getElementById("stat-wlr").innerText = data.stats.wlr;
+                document.getElementById("stat-final-kills").innerText = data.stats.final_kills;
+                document.getElementById("stat-ws").innerText = data.stats.highest_ws;
+                document.getElementById("stat-beds").innerText = data.stats.beds_destroyed;
+                document.getElementById("stat-kills").innerText = data.stats.kills;
+                document.getElementById("stat-deaths").innerText = data.stats.deaths;
+                document.getElementById("stat-ratios").innerText = `KDR: ${data.stats.kdr} | FKDR: ${data.stats.fkdr}`;
+
+                // Mostra la scheda compilata
+                statsCard.style.display = "block";
+            } catch (err) {
+                errorDiv.innerText = err.message || "Errore di connessione con l'API di Render.";
+                errorDiv.style.display = "block";
+            } finally {
+                loading.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
