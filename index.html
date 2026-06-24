@@ -42,6 +42,8 @@
         .btn:active { transform: scale(0.95); }
 
         .global-loading { background: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255, 71, 87, 0.3); padding: 15px; border-radius: 8px; max-width: 500px; margin: 0 auto 30px auto; text-align: center; font-size: 0.95rem; color: #ff6b81; transition: all 0.5s ease; }
+        .spinner { display: inline-block; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         .roster-section { width: 100%; max-width: 1000px; padding: 0 20px 60px 20px; box-sizing: border-box; }
         .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 50px 0 25px 0; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -90,7 +92,7 @@
         <h1>NOTSWEATY</h1>
         <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan.</p>
         
-        <div id="globalStatus" class="global-loading">⚡ Loading live clan statistics... <span id="loadCount">0</span>/21</div>
+        <div id="globalStatus" class="global-loading"><span class="spinner">⏳</span> Svegliando il server Render (Può richiedere fino a 60 secondi)...</div>
 
         <div class="search-container">
             <div class="search-box">
@@ -176,52 +178,65 @@
             });
         }
 
-        // Sistema di Fetch Indipendente con AbortController (Timeout rigido a 15 secondi)
-        async function fetchWithTimeout(player) {
+        // FETCH SEMPLICE SENZA TIMEOUT ARTIFICIALI
+        async function fetchPlayerData(player) {
             const primaryUrl = `${API_URL}${player}`;
             const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
 
-            // TENTATIVO 1: Chiamata Diretta
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s max
-                const response = await fetch(primaryUrl, { signal: controller.signal });
-                clearTimeout(timeoutId);
+                const response = await fetch(primaryUrl);
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.warn(`Direct fetch failed/timed out for ${player}`);
+                console.warn(`[INFO] Connessione diretta fallita per ${player}, provo proxy...`);
             }
 
-            // TENTATIVO 2: Proxy Fallback
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s max
-                const response = await fetch(fallbackUrl, { signal: controller.signal });
-                clearTimeout(timeoutId);
+                const response = await fetch(fallbackUrl);
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.error(`Proxy fetch failed/timed out for ${player}`);
+                console.error(`[ERRORE] Entrambi i fetch falliti per ${player}`);
             }
 
             return null;
         }
 
-        // NUOVA LOGICA: Esecuzione asincrona sfasata (Non blocca la catena!)
-        function fetchAllClanStatsLive() {
+        // LOGICA DI AVVIO PRINCIPALE
+        async function startSystem() {
             const statusDiv = document.getElementById("globalStatus");
-            statusDiv.innerHTML = `⏳ Svegliando il server Render e avviando il caricamento...`;
+            
+            // FASE 1: "WAKE UP" DEL SERVER
+            // Facciamo una singola richiesta e aspettiamo tutto il tempo necessario
+            statusDiv.innerHTML = `<span class="spinner">⏳</span> Sto svegliando il server API (Può richiedere fino a 60 secondi)... pazienza!`;
+            
+            const firstPlayer = allPlayersList[0]; // Krishiv00
+            
+            // Mettiamo l'icona clessidra su Krishiv
+            const primaCard = document.getElementById(`card-${firstPlayer.toLowerCase()}`);
+            if(primaCard) primaCard.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
 
-            allPlayersList.forEach((player, index) => {
-                // Ogni giocatore si attiva esattamente (index * 1500) millisecondi dopo l'avvio della pagina
-                setTimeout(async () => {
-                    const card = document.getElementById(`card-${player.toLowerCase()}`);
-                    if (card) {
-                        // Cambia temporaneamente i trattini in clessidre per indicare il caricamento attivo di quel player
-                        card.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
-                    }
+            const firstData = await fetchPlayerData(firstPlayer);
+            
+            // Il server ora è sveglio (che abbia avuto successo o meno)
+            if (firstData && firstData.stats) {
+                liveClanData[firstPlayer.toLowerCase()] = firstData;
+                updatePlayerCardUI(firstPlayer, firstData.stats);
+            } else {
+                showErrorOnCardUI(firstPlayer);
+            }
+            
+            loadedPlayers++;
+            statusDiv.innerHTML = `⚡ Server Sveglio! Caricamento statistiche... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
 
-                    const data = await fetchWithTimeout(player);
-                    
+            // FASE 2: CARICAMENTO A CASCATA DEGLI ALTRI (Ora che il server è pronto)
+            for (let i = 1; i < allPlayersList.length; i++) {
+                const player = allPlayersList[i];
+                
+                // Clessidra sul player corrente
+                const card = document.getElementById(`card-${player.toLowerCase()}`);
+                if(card) card.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
+
+                // Esegue il fetch (senza bloccare la UI perché siamo in asincrono)
+                fetchPlayerData(player).then(data => {
                     if (data && data.stats) {
                         liveClanData[player.toLowerCase()] = data;
                         updatePlayerCardUI(player, data.stats);
@@ -231,18 +246,19 @@
 
                     loadedPlayers++;
                     document.getElementById("loadCount").innerText = loadedPlayers;
-                    statusDiv.innerHTML = `⚡ Loading live clan statistics... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
 
-                    // Se tutti i timer hanno terminato l'esecuzione
                     if (loadedPlayers === totalPlayers) {
                         statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
                         statusDiv.style.borderColor = "var(--success-color)";
                         statusDiv.style.color = "var(--success-color)";
-                        statusDiv.innerHTML = "✅ Clan statistics synchronization complete!";
+                        statusDiv.innerHTML = "✅ Statistiche del clan sincronizzate!";
                         setTimeout(() => { statusDiv.style.display = "none"; }, 5000);
                     }
-                }, index * 1500); 
-            });
+                });
+
+                // Attende 800ms prima di far partire la richiesta del prossimo per non sovraccaricare il server
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
         }
 
         function updatePlayerCardUI(username, stats) {
@@ -309,8 +325,8 @@
             dataDiv.style.display = "none";
 
             try {
-                const data = await fetchWithTimeout(username);
-                if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato o API non raggiungibile.");
+                const data = await fetchPlayerData(username);
+                if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato o API spenta.");
 
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
@@ -338,7 +354,7 @@
 
         window.onload = function() {
             buildInitialGrids();
-            fetchAllClanStatsLive();
+            startSystem(); // Fa partire il sistema
         };
     </script>
 </body>
