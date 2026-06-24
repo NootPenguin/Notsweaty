@@ -109,6 +109,7 @@
             text-align: center;
             font-size: 0.95rem;
             color: #ff6b81;
+            transition: all 0.5s ease;
         }
 
         /* --- CLAN ROSTER & HIERARCHY --- */
@@ -252,15 +253,12 @@
 </head>
 <body>
 
-    <!-- HERO SECTION -->
     <div class="hero">
         <h1>NOTSWEATY</h1>
         <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan. Domination is our standard in JartexNetwork BedWars.</p>
         
-        <!-- STATUS DI CARICAMENTO GLOBALE -->
         <div id="globalStatus" class="global-loading">⚡ Loading live clan statistics from Jartex API... <span id="loadCount">0</span>/21</div>
 
-        <!-- MANUAL SEARCH -->
         <div class="search-container">
             <div class="search-box">
                 <input type="text" id="customUsername" placeholder="Search any player outside the clan..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
@@ -269,7 +267,6 @@
         </div>
     </div>
 
-    <!-- ROSTER / HIERARCHY -->
     <div class="roster-section">
         <div class="rank-title leader">👑 Clan Leader</div>
         <div id="leader-grid" class="grid grid-leader"></div>
@@ -281,7 +278,6 @@
         <div id="members-grid" class="grid grid-members"></div>
     </div>
 
-    <!-- STATS MODAL (POP-UP) -->
     <div id="statsModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
@@ -303,7 +299,7 @@
                         <tr><td>Beds Destroyed</td><td id="stat-beds">-</td></tr>
                         <tr><td>Regular Kills</td><td id="stat-kills">-</td></tr>
                         <tr><td>Regular Deaths</td><td id="stat-deaths">-</td></tr>
-                        <li>Ratios: <span id="stat-ratios" style="font-weight: bold; color: white;">-</span></li>
+                        <tr><td>Ratios</td><td id="stat-ratios">-</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -311,21 +307,22 @@
     </div>
 
     <script>
+        // Configurazione degli URL dell'API e del Proxy CORS
         const API_URL = "https://jartexapi2-0.onrender.com/api/stats/";
+        const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
-        // Definizione fissa della Struttura del Clan
+        // Definizione fissa dei Membri del Clan
         const clanRoles = {
             leader: ["Krishiv00"],
             commanders: ["Massimo00875", "Valerioita", "Noot_Penguin"],
             members: ["Vexral0", "Capta1nLeViI", "c41v", "grumen", "Whish3", "Ghostqx", "Kosticcc", "gingeler39", "Rock_Gamer", "_Mimero_", "I_quit", "iDesk76", "ManuelCCTV", "_Zenux", "14elo_", "luca05", "Thaazin"]
         };
 
-        // Qui salveremo tutti i dati scaricati live all'ingresso
         let liveClanData = {}; 
         let loadedPlayers = 0;
         const totalPlayers = clanRoles.leader.length + clanRoles.commanders.length + clanRoles.members.length;
 
-        // Genera inizialmente i riquadri vuoti per non far aspettare l'utente
+        // Costruisce la grafica con i segnaposto iniziali
         function buildInitialGrids() {
             generatePlaceholderGrid(clanRoles.leader, document.getElementById("leader-grid"));
             generatePlaceholderGrid(clanRoles.commanders, document.getElementById("commanders-grid"));
@@ -351,38 +348,57 @@
             });
         }
 
-        // Funzione asincrona che bombarda l'API all'avvio per prendere i dati di TUTTI contemporaneamente
+        // Gestione intelligente dei tentativi di connessione (Diretto -> Proxy)
+        async function fetchWithRetry(player) {
+            const primaryUrl = `${API_URL}${player}`;
+            const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
+
+            // Tentativo 1: Richiesta diretta all'API
+            try {
+                const response = await fetch(primaryUrl);
+                if (response.ok) return await response.json();
+            } catch (e) {
+                console.log(`[Network] Chiamata diretta fallita per ${player}, provo il Proxy CORS...`);
+            }
+
+            // Tentativo 2: Richiesta tramite il Proxy AllOrigins (Risolve il problema del CORS)
+            try {
+                const response = await fetch(fallbackUrl);
+                if (response.ok) return await response.json();
+            } catch (e) {
+                console.error(`[API ERROR] Impossibile contattare l'API per ${player}:`, e);
+            }
+            return null;
+        }
+
+        // Scarica i dati di tutti i membri in parallelo appena si apre il sito
         async function fetchAllClanStatsLive() {
             const allPlayers = [...clanRoles.leader, ...clanRoles.commanders, ...clanRoles.members];
             
-            // Scarica i dati in parallelo (velocissimo!)
             allPlayers.forEach(async (player) => {
-                try {
-                    const response = await fetch(`${API_URL}${player}`);
-                    const data = await response.json();
-                    
-                    if (data && data.stats) {
-                        liveClanData[player.toLowerCase()] = data;
-                        // Aggiorna istantaneamente la card di quel giocatore sullo schermo
-                        updatePlayerCardUI(player, data.stats);
-                    }
-                } catch (e) {
-                    console.error(`Errore caricamento live per ${player}:`, e);
-                } finally {
-                    loadedPlayers++;
-                    document.getElementById("loadCount").innerText = loadedPlayers;
-                    if (loadedPlayers >= totalPlayers) {
-                        document.getElementById("globalStatus").style.backgroundColor = "rgba(46, 213, 115, 0.1)";
-                        document.getElementById("globalStatus").style.borderColor = "var(--success-color)";
-                        document.getElementById("globalStatus").style.color = "var(--success-color)";
-                        document.getElementById("globalStatus").innerHTML = "✅ All clan statistics updated to the exact second!";
-                        setTimeout(() => { document.getElementById("globalStatus").style.display = "none"; }, 4000);
-                    }
+                const data = await fetchWithRetry(player);
+                
+                if (data && data.stats) {
+                    liveClanData[player.toLowerCase()] = data;
+                    updatePlayerCardUI(player, data.stats);
+                }
+
+                // Incrementa e aggiorna la barra di progresso sul sito
+                loadedPlayers++;
+                document.getElementById("loadCount").innerText = loadedPlayers;
+                
+                if (loadedPlayers >= totalPlayers) {
+                    const statusDiv = document.getElementById("globalStatus");
+                    statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
+                    statusDiv.style.borderColor = "var(--success-color)";
+                    statusDiv.style.color = "var(--success-color)";
+                    statusDiv.innerHTML = "✅ All clan statistics updated to the exact second!";
+                    setTimeout(() => { statusDiv.style.display = "none"; }, 4000);
                 }
             });
         }
 
-        // Inietta i dati live nella card specifica non appena la chiamata API risponde
+        // Inserisce i dati estratti dentro le rispettive schede giocatore
         function updatePlayerCardUI(username, stats) {
             const card = document.getElementById(`card-${username.toLowerCase()}`);
             if (!card) return;
@@ -393,7 +409,7 @@
             card.querySelector(".style-wlr").innerText = stats.wlr || "0.00";
         }
 
-        // Mostra il pop-up dettagliato (istantaneo se è del clan ed è già stato scaricato)
+        // Gestione del pop-up con tutti i dettagli approfonditi
         function showPlayerDetails(username) {
             const lowerName = username.toLowerCase();
             if (liveClanData[lowerName]) {
@@ -421,7 +437,7 @@
             }
         }
 
-        // Cerca player esterni via barra di ricerca
+        // Ricerca manuale per utenti esterni al clan
         async function fetchLivePlayerStats(username) {
             username = username.trim();
             if (!username) return;
@@ -437,10 +453,8 @@
             dataDiv.style.display = "none";
 
             try {
-                const response = await fetch(`${API_URL}${username}`);
-                const data = await response.json();
-
-                if (data.errore) throw new Error(data.messaggio || "Player not found.");
+                const data = await fetchWithRetry(username);
+                if (!data || data.errore) throw new Error(data?.messaggio || "Player not found or API sleeping.");
 
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
@@ -466,7 +480,7 @@
             document.getElementById("statsModal").style.display = "none";
         }
 
-        // All'apertura della pagina esegue subito la logica di caricamento istantaneo
+        // Inizializzazione della pagina all'ingresso
         window.onload = function() {
             buildInitialGrids();
             fetchAllClanStatsLive();
