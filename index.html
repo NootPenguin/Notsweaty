@@ -28,10 +28,11 @@
             align-items: center;
         }
 
+        /* Qui ho inserito il tuo nuovo link dell'immagine .png */
         .hero { 
             width: 100%; 
             position: relative;
-            background-image: linear-gradient(rgba(10, 12, 20, 0.6), rgba(10, 12, 20, 0.9)), url('immagine.jpg');
+            background-image: linear-gradient(rgba(10, 12, 20, 0.6), rgba(10, 12, 20, 0.9)), url('https://i.imgur.com/5dmrRJT.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -246,7 +247,6 @@
             const btn = card.querySelector(".load-btn");
             if(btn) btn.style.display = "none";
 
-            // Aggiorna le 3 statistiche principali richieste (WLR, FKDR, KDR)
             card.querySelector(".style-wlr").innerText = stats.wlr || "0.00";
             card.querySelector(".style-wlr").style.color = "var(--success-color)";
             
