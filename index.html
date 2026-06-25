@@ -30,7 +30,7 @@
 
         .hero { width: 100%; max-width: 1000px; text-align: center; padding: 60px 20px 40px 20px; box-sizing: border-box; }
         .hero h1 { font-size: 3.5rem; color: var(--accent-color); margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 20px rgba(255, 71, 87, 0.4); }
-        .hero p.tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6; }
+        .hero p.tagline { font-size: 1.15rem; color: var(--text-muted); max-width: 750px; margin: 0 auto 30px auto; line-height: 1.7; }
 
         .search-container { width: 100%; max-width: 500px; margin: 0 auto 40px auto; }
         .search-box { display: flex; gap: 10px; }
@@ -41,9 +41,7 @@
         .btn:hover { background-color: var(--accent-hover); }
         .btn:active { transform: scale(0.95); }
 
-        .global-loading { background: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255, 71, 87, 0.3); padding: 15px; border-radius: 8px; max-width: 500px; margin: 0 auto 30px auto; text-align: center; font-size: 0.95rem; color: #ff6b81; transition: all 0.5s ease; }
-        .spinner { display: inline-block; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .global-loading { background: rgba(30, 34, 53, 0.6); border: 1px solid #1e2235; padding: 15px; border-radius: 8px; max-width: 500px; margin: 0 auto 30px auto; text-align: center; font-size: 0.95rem; color: var(--text-muted); }
 
         .roster-section { width: 100%; max-width: 1000px; padding: 0 20px 60px 20px; box-sizing: border-box; }
         .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 50px 0 25px 0; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -57,7 +55,7 @@
         .grid-commanders { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
         .grid-members { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 
-        .player-card { background-color: var(--card-bg); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; border: 1px solid #1e2235; transition: border-color 0.3s, transform 0.3s; }
+        .player-card { background-color: var(--card-bg); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; border: 1px solid #1e2235; transition: border-color 0.3s, transform 0.3s; position: relative; }
         .player-card:hover { border-color: var(--accent-color); transform: translateY(-3px); }
         .player-name { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; text-align: center; word-break: break-all; }
 
@@ -66,7 +64,10 @@
         .mini-stats span.val { color: white; font-weight: bold; }
         .val.error { color: #ff4757 !important; }
 
-        .btn-sm { padding: 6px 12px; font-size: 11px; background-color: #24293e; border: 1px solid #383e56; width: 100%; }
+        .card-actions { display: flex; gap: 8px; width: 100%; }
+        .btn-sm { padding: 8px; font-size: 11px; background-color: #24293e; border: 1px solid #383e56; flex: 1; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .btn-sm.load-btn { background-color: rgba(46, 213, 115, 0.1); border-color: rgba(46, 213, 115, 0.4); color: var(--success-color); }
+        .btn-sm.load-btn:hover { background-color: var(--success-color); color: black; }
         .btn-sm:hover { background-color: var(--accent-color); border-color: var(--accent-color); }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 1000; backdrop-filter: blur(5px); align-items: center; justify-content: center; }
@@ -90,9 +91,10 @@
 
     <div class="hero">
         <h1>NOTSWEATY</h1>
-        <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan.</p>
+        <!-- Descrizione accurata incentrata sullo Showcase del Clan -->
+        <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. This space serves as our roster gallery to highlight our official team structure, leadership, and community members. Feel free to explore our line-up or look up individual member records.</p>
         
-        <div id="globalStatus" class="global-loading"><span class="spinner">⏳</span> Sto svegliando il server API su Render...</div>
+        <div class="global-loading">ℹ️ Click "Load Stats" inside any member's card to view their real-time statistics.</div>
 
         <div class="search-container">
             <div class="search-box">
@@ -116,7 +118,8 @@
     <div id="statsModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
-            <div id="modalLoading" class="loading">Fetching live data...</div>
+            <!-- Nuova stringa richiesta: Loading stats, please wait... -->
+            <div id="modalLoading" class="loading">Loading stats, please wait...</div>
             <div id="modalError" class="error-msg" style="display:none;"></div>
             
             <div id="modalData" style="display:none;">
@@ -149,9 +152,6 @@
         };
 
         let liveClanData = {}; 
-        let loadedPlayers = 0;
-        const allPlayersList = [...clanRoles.leader, ...clanRoles.commanders, ...clanRoles.members];
-        const totalPlayers = allPlayersList.length;
 
         function buildInitialGrids() {
             generatePlaceholderGrid(clanRoles.leader, document.getElementById("leader-grid"));
@@ -172,93 +172,57 @@
                         <div><span>Final Kills:</span><span class="val style-fkills">-</span></div>
                         <div><span>WLR:</span><span class="val style-wlr">-</span></div>
                     </div>
-                    <button class="btn btn-sm" onclick="showPlayerDetails('${player}')">More Stats</button>
+                    <div class="card-actions">
+                        <button class="btn-sm load-btn" onclick="loadSingleCardStats('${player}')">Load Stats</button>
+                        <button class="btn-sm" onclick="showPlayerDetails('${player}')">Full Stats</button>
+                    </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // STRATEGIA ANTIBLOCCO ANTICLOUDFLARE: Invertiamo l'ordine delle chiamate
         async function fetchPlayerData(player) {
             const primaryUrl = `${API_URL}${player}`;
             const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
 
-            // Tentativo 1: Proxy Web (Nasconde l'IP di Render simulandone altri sparsi)
-            try {
-                const response = await fetch(fallbackUrl);
-                if (response.ok) return await response.json();
-            } catch (e) {
-                console.warn(`[PROXY FAILED] Proxy fallito per ${player}, tento via diretta...`);
-            }
-
-            // Tentativo 2: Connessione Diretta
             try {
                 const response = await fetch(primaryUrl);
                 if (response.ok) return await response.json();
-            } catch (e) {
-                console.error(`[CRITICAL] Entrambe le rotte fallite per ${player}`);
-            }
+            } catch (e) {}
+
+            try {
+                const response = await fetch(fallbackUrl);
+                if (response.ok) return await response.json();
+            } catch (e) {}
 
             return null;
         }
 
-        async function startSystem() {
-            const statusDiv = document.getElementById("globalStatus");
-            statusDiv.innerHTML = `<span class="spinner">⏳</span> Collegamento iniziale sicuro con il server...`;
-            
-            const firstPlayer = allPlayersList[0]; // Krishiv00
-            const primaCard = document.getElementById(`card-${firstPlayer.toLowerCase()}`);
-            if(primaCard) primaCard.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
+        async function loadSingleCardStats(username) {
+            const card = document.getElementById(`card-${username.toLowerCase()}`);
+            if (!card) return;
 
-            const firstData = await fetchPlayerData(firstPlayer);
+            const spans = card.querySelectorAll(".val");
+            // Stringa richiesta per il caricamento sulla scheda
+            spans.forEach(span => { span.innerText = "Loading..."; span.classList.remove("error"); });
+
+            const data = await fetchPlayerData(username);
             
-            if (firstData && firstData.stats) {
-                liveClanData[firstPlayer.toLowerCase()] = firstData;
-                updatePlayerCardUI(firstPlayer, firstData.stats);
+            if (data && data.stats) {
+                liveClanData[username.toLowerCase()] = data;
+                updatePlayerCardUI(username, data.stats);
             } else {
-                showErrorOnCardUI(firstPlayer);
-            }
-            
-            loadedPlayers++;
-            statusDiv.innerHTML = `⚡ Canale aperto. Sincronizzazione giocatori (Attesa di sicurezza anti-blocco)... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
-
-            // FASE 2: CARICAMENTO RALLENTATO A 3.5 SECONDI
-            for (let i = 1; i < allPlayersList.length; i++) {
-                const player = allPlayersList[i];
-                
-                const card = document.getElementById(`card-${player.toLowerCase()}`);
-                if(card) card.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
-
-                fetchPlayerData(player).then(data => {
-                    if (data && data.stats) {
-                        liveClanData[player.toLowerCase()] = data;
-                        updatePlayerCardUI(player, data.stats);
-                    } else {
-                        showErrorOnCardUI(player);
-                    }
-
-                    loadedPlayers++;
-                    document.getElementById("loadCount").innerText = loadedPlayers;
-
-                    if (loadedPlayers === totalPlayers) {
-                        statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
-                        statusDiv.style.borderColor = "var(--success-color)";
-                        statusDiv.style.color = "var(--success-color)";
-                        statusDiv.innerHTML = "✅ Tutte le statistiche del clan sono online!";
-                        setTimeout(() => { statusDiv.style.display = "none"; }, 5000);
-                    }
-                });
-
-                // Pausa rigorosa di 3500ms tra le chiamate per "ingannare" Cloudflare
-                await new Promise(resolve => setTimeout(resolve, 3500));
+                showErrorOnCardUI(username);
             }
         }
 
         function updatePlayerCardUI(username, stats) {
             const card = document.getElementById(`card-${username.toLowerCase()}`);
             if (!card) return;
-            card.querySelectorAll(".val").forEach(span => span.classList.remove("error"));
             
+            const btn = card.querySelector(".load-btn");
+            if(btn) btn.style.display = "none";
+
             card.querySelector(".style-wins").innerText = stats.wins || "0";
             card.querySelector(".style-wins").style.color = "var(--success-color)";
             card.querySelector(".style-fkills").innerText = stats.final_kills || "0";
@@ -321,6 +285,9 @@
                 const data = await fetchPlayerData(username);
                 if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato.");
 
+                liveClanData[username.toLowerCase()] = data;
+                updatePlayerCardUI(username, data.stats);
+
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
                 document.getElementById("stat-losses").innerText = data.stats.losses;
@@ -347,7 +314,6 @@
 
         window.onload = function() {
             buildInitialGrids();
-            startSystem();
         };
     </script>
 </body>
