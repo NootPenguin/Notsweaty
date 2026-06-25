@@ -4,536 +4,1231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOTSWEATY CLAN - Official Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Colori estratti dal logo: Ciano, Oro, Blu scuro/Grigio scuro */
-            --bg-color: #0b0f14;
-            --card-bg: #131a22;
-            --accent-color: #00c3b6; /* Ciano/Teal del bordo */
-            --accent-hover: #00e5d6;
-            --secondary-color: #172a40; /* Blu scuro dello scudo */
-            --text-color: #ffffff;
-            --text-muted: #8b9bb4;
-            --success-color: #f1c40f; /* Oro della spada/testo */
-            --gold: #f1c40f;
+            --bg: #070b10;
+            --bg2: #0d1520;
+            --card: #0f1c2a;
+            --card-hover: #142233;
+            --border: rgba(0, 195, 182, 0.12);
+            --border-bright: rgba(0, 195, 182, 0.45);
+            --cyan: #00c3b6;
+            --cyan-bright: #00ffe5;
+            --gold: #f0b429;
+            --gold-dim: rgba(240, 180, 41, 0.15);
             --silver: #ced6e0;
-            --error-color: #ff4757;
+            --red: #ff4757;
+            --text: #ffffff;
+            --muted: #6b7fa3;
+            --muted2: #4a5a72;
+            --glass: rgba(13, 21, 32, 0.7);
         }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* --- NAVBAR --- */
+
+
+        /* ─── NAVBAR ─── */
         .navbar {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 40px;
-            background-color: rgba(11, 15, 20, 0.85);
-            backdrop-filter: blur(10px);
+            padding: 14px 48px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 2px solid var(--accent-color);
-            box-sizing: border-box;
         }
-
         .nav-logo {
-            font-weight: 900;
-            font-size: 1.5rem;
-            color: var(--gold);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-
-        /* --- HERO SECTION --- */
-        .hero { 
-            width: 100%; 
-            position: relative;
-            background-image: linear-gradient(rgba(11, 15, 20, 0.7), rgba(11, 15, 20, 0.95)), url('https://i.imgur.com/5dmrRJT.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            text-align: center; 
-            padding: 140px 20px 100px 20px; 
-            box-sizing: border-box; 
-            border-bottom: 1px solid var(--secondary-color);
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .main-title {
-            font-size: 5rem;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            /* Effetto gradiente Oro -> Ciano */
-            background: linear-gradient(45deg, var(--gold), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(0, 195, 182, 0.2);
-        }
-
-        .hero p.tagline { 
-            font-size: 1.3rem; 
-            color: #ffffff; 
-            max-width: 750px; 
-            margin: 40px auto 0 auto; /* Spazio aumentato per staccare il testo dal titolo */
-            line-height: 1.8; 
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-        }
-
-        /* --- GLOBAL SECTION STYLING --- */
-        .content-section {
-            width: 100%;
-            max-width: 1050px;
-            padding: 60px 20px;
-            box-sizing: border-box;
-            border-bottom: 1px solid rgba(23, 42, 64, 0.5); /* Bordo sottile di separazione */
-        }
-
-        .section-header {
-            text-align: center;
-            font-size: 2.2rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-top: 0;
-            margin-bottom: 40px;
-            color: var(--text-color);
-        }
-
-        .section-header span {
-            color: var(--accent-color);
-        }
-
-        .section-header .gold-text {
-            color: var(--gold);
-        }
-
-        /* --- ABOUT SECTION --- */
-        .about-text {
-            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
             font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--text-muted);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .about-text strong {
-            color: var(--text-color);
-        }
-
-        /* --- ROSTER SECTION --- */
-        .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 40px 0 25px 0; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
-        .rank-title.leader { color: var(--gold); }
-        .rank-title.commanders { color: var(--silver); }
-        .rank-title.members { color: var(--accent-color); }
-        .rank-title::before, .rank-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--secondary-color), transparent); max-width: 150px; }
-
-        .grid { display: grid; gap: 20px; }
-        .grid-leader { grid-template-columns: 1fr; max-width: 350px; margin: 0 auto; }
-        .grid-commanders { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-        .grid-members { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-
-        .player-card { background-color: var(--card-bg); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--secondary-color); transition: border-color 0.3s, transform 0.3s; position: relative; }
-        .player-card:hover { border-color: var(--accent-color); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 195, 182, 0.1); }
-        .player-name { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; text-align: center; word-break: break-all; color: white; }
-
-        .mini-stats { width: 100%; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; border-top: 1px solid var(--secondary-color); padding-top: 10px; }
-        .mini-stats div { display: flex; justify-content: space-between; margin-bottom: 4px; }
-        .mini-stats span.val { color: white; font-weight: bold; }
-        .val.error { color: var(--error-color) !important; }
-
-        .card-actions { display: flex; gap: 8px; width: 100%; }
-        .btn-sm { padding: 8px; font-size: 11px; background-color: #1a2332; border: 1px solid #2a3b52; flex: 1; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; transition: all 0.2s; text-align: center; text-transform: uppercase; }
-        .btn-sm.load-btn { background-color: rgba(0, 195, 182, 0.1); border-color: rgba(0, 195, 182, 0.4); color: var(--accent-color); }
-        .btn-sm.load-btn:hover { background-color: var(--accent-color); color: #000; }
-        .btn-sm:hover { background-color: var(--gold); border-color: var(--gold); color: #000; }
-
-        /* --- LINKS SECTION --- */
-        .links-container {
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .yt-btn {
-            display: inline-flex;
             align-items: center;
             gap: 10px;
-            background-color: #ff0000;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
+        }
+        .nav-logo::before {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan);
+        }
+        .nav-links { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+        .nav-links a {
+            color: var(--muted);
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 0.82rem;
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.2s;
         }
-
-        .yt-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+        .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+        .nav-links .nav-cta {
+            background: rgba(0, 195, 182, 0.1);
+            border: 1px solid var(--border-bright);
+            color: var(--cyan);
+            margin-left: 8px;
         }
+        .nav-links .nav-cta:hover { background: var(--cyan); color: #000; }
 
-        /* --- BOTTOM SEARCH SECTION --- */
-        .bottom-section {
+        /* Theme toggle */
+        .theme-toggle {
+            cursor: pointer;
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            margin-left: 8px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover { border-color: var(--gold); background: var(--gold-dim); }
+
+        /* ─── HERO ─── */
+        .hero {
+            width: 100%;
+            min-height: 88vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            border-bottom: none; /* Rimuove la linea dall'ultima sezione */
-            padding-bottom: 100px;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 24px 100px;
+            position: relative;
+            background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(0,195,182,0.08) 0%, transparent 70%),
+                        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(240,180,41,0.05) 0%, transparent 60%),
+                        var(--bg);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0,195,182,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,195,182,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 20%, black 0%, transparent 70%);
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border: 1px solid var(--border-bright);
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            background: rgba(0, 195, 182, 0.06);
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge .pulse {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--cyan);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(0,195,182,0.6); }
+            50% { box-shadow: 0 0 0 6px rgba(0,195,182,0); }
+        }
+        .main-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--cyan) 60%, var(--cyan-bright) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 28px;
+        }
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 560px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 48px;
+        }
+        .hero-sub strong { color: var(--text); }
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .hero-stat {
+            text-align: center;
+            padding: 20px 32px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            min-width: 120px;
+        }
+        .hero-stat .num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+        .hero-stat .num.gold { color: var(--gold); }
+        .hero-stat .label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            margin-top: 4px;
         }
 
-        .global-loading { background: rgba(19, 26, 34, 0.8); border: 1px solid var(--secondary-color); padding: 12px; border-radius: 8px; max-width: 500px; margin: 0 auto 20px auto; text-align: center; font-size: 0.9rem; color: var(--text-muted); width: 100%; box-sizing: border-box;}
+        /* ─── LIGHT MODE ─── */
+        body.light {
+            --bg: #f0f4f8;
+            --bg2: #e2e8f0;
+            --card: #ffffff;
+            --card-hover: #f8fafc;
+            --border: rgba(0, 150, 140, 0.15);
+            --border-bright: rgba(0, 150, 140, 0.4);
+            --text: #0f1c2a;
+            --muted: #5a6a7e;
+            --muted2: #8a9ab2;
+            --glass: rgba(240, 244, 248, 0.85);
+        }
+        body.light .hero {
+            background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(0,195,182,0.07) 0%, transparent 70%), var(--bg);
+        }
+        body.light .hero::before { opacity: 0.4; }
+        body.light .nav-links a:hover { background: rgba(0,0,0,0.05); }
 
-        .search-container { width: 100%; max-width: 500px; margin: 0 auto; }
+        /* ─── SECTIONS ─── */
+        .section {
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+        .section + .section { border-top: 1px solid var(--border); }
+        .full-width-section {
+            width: 100%;
+            border-top: 1px solid var(--border);
+        }
+        .section-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .section-title .gold { color: var(--gold); }
+        .section-title .cyan { color: var(--cyan); }
+        .section-desc {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 600px;
+        }
+        .section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        /* ─── LEADERBOARD ─── */
+        .lb-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .lb-btn {
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .lb-btn:hover, .lb-btn.active {
+            background: rgba(0,195,182,0.1);
+            border-color: var(--border-bright);
+            color: var(--cyan);
+        }
+        .lb-load-btn {
+            padding: 10px 22px;
+            border-radius: 8px;
+            border: 1px solid var(--border-bright);
+            background: rgba(0,195,182,0.1);
+            color: var(--cyan);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .lb-load-btn:hover { background: var(--cyan); color: #000; }
+        .lb-load-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .leaderboard-table thead th {
+            text-align: left;
+            padding: 10px 16px;
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+        .leaderboard-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+        .leaderboard-table tbody tr:hover { background: var(--card-hover); }
+        .leaderboard-table td {
+            padding: 14px 16px;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        .lb-rank {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            width: 48px;
+            text-align: center;
+        }
+        .lb-rank.r1 { color: var(--gold); }
+        .lb-rank.r2 { color: var(--silver); }
+        .lb-rank.r3 { color: #cd7f32; }
+        .lb-rank.other { color: var(--muted2); }
+        .lb-player { font-weight: 600; }
+        .lb-role-pill {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+        .pill-leader { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
+        .pill-commander { background: rgba(206,214,224,0.1); color: var(--silver); border: 1px solid rgba(206,214,224,0.25); }
+        .pill-member { background: rgba(0,195,182,0.08); color: var(--cyan); border: 1px solid var(--border-bright); }
+        .lb-value { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--cyan); text-align: right; }
+        .lb-value.gold { color: var(--gold); }
+        .lb-loading { text-align: center; padding: 40px; color: var(--muted); font-size: 0.9rem; }
+        .lb-bar-cell { width: 30%; }
+        .lb-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 6px; overflow: hidden; }
+        .lb-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cyan), var(--cyan-bright)); transition: width 0.6s ease; }
+
+        /* ─── ROSTER ─── */
+        .rank-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 48px 0 24px;
+        }
+        .rank-divider-line { flex: 1; height: 1px; background: var(--border); }
+        .rank-divider-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            padding: 4px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+        }
+        .rank-divider-label.leader { color: var(--gold); border-color: rgba(240,180,41,0.3); background: var(--gold-dim); }
+        .rank-divider-label.commander { color: var(--silver); border-color: rgba(206,214,224,0.2); background: rgba(206,214,224,0.05); }
+        .rank-divider-label.member { color: var(--cyan); border-color: var(--border-bright); background: rgba(0,195,182,0.05); }
+
+        .grid { display: grid; gap: 16px; justify-items: center; }
+        .grid-leader { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
+        .grid-commanders { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); justify-content: center; }
+        .grid-members { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+
+        .player-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .player-card:hover { border-color: var(--border-bright); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,195,182,0.08); }
+        .player-card:hover::before { opacity: 1; }
+        .player-avatar {
+            width: 52px; height: 52px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--bg2), var(--card-hover));
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: var(--cyan);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .player-name { font-weight: 700; font-size: 1rem; margin-bottom: 14px; text-align: center; word-break: break-all; }
+        .mini-stats { width: 100%; font-size: 0.8rem; color: var(--muted); margin-bottom: 14px; border-top: 1px solid var(--border); padding-top: 12px; text-align: left; }
+        .mini-stats div { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .mini-stats span.val { color: var(--text); font-weight: 700; }
+        .val.error { color: var(--red) !important; }
+        .card-actions { display: flex; gap: 8px; width: 100%; }
+        .btn-sm {
+            padding: 8px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            background: transparent;
+            border: 1px solid var(--border);
+            flex: 1;
+            border-radius: 8px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-sm.load-btn { border-color: var(--border-bright); color: var(--cyan); background: rgba(0,195,182,0.05); }
+        .btn-sm.load-btn:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+        .btn-sm:hover { background: rgba(240,180,41,0.1); border-color: rgba(240,180,41,0.4); color: var(--gold); }
+
+        /* ─── NEWS ─── */
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .news-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: border-color 0.2s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .news-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+        .news-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .news-tag {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+        }
+        .tag-new { background: rgba(0,255,100,0.1); color: #00ff64; border: 1px solid rgba(0,255,100,0.25); }
+        .tag-event { background: rgba(0,195,182,0.1); color: var(--cyan); border: 1px solid var(--border-bright); }
+        .tag-update { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
+        .news-date { font-size: 0.72rem; color: var(--muted2); }
+        .news-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text); }
+        .news-body { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+        /* ─── MEDIA ─── */
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .media-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .media-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+        .media-embed {
+            width: 100%;
+            aspect-ratio: 16/9;
+        }
+        .media-embed iframe { width: 100%; height: 100%; border: none; display: block; }
+        .media-info { padding: 16px; }
+        .media-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+        .media-by { font-size: 0.75rem; color: var(--muted); }
+
+        /* ─── LINKS ─── */
+        .links-grid { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .yt-btn {
+            background: rgba(255,0,0,0.1);
+            border: 1px solid rgba(255,0,0,0.3);
+            color: #ff4444;
+        }
+        .yt-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,0,0,0.2); background: rgba(255,0,0,0.2); }
+        .discord-btn {
+            background: rgba(88,101,242,0.1);
+            border: 1px solid rgba(88,101,242,0.3);
+            color: #7289da;
+        }
+        .discord-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(88,101,242,0.2); background: rgba(88,101,242,0.2); }
+
+        /* ─── RECRUITMENT ─── */
+        .recruit-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        .req-list { display: flex; flex-direction: column; gap: 12px; }
+        .req-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.88rem;
+        }
+        .req-icon {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .req-icon.cyan { background: rgba(0,195,182,0.1); }
+        .req-icon.gold { background: var(--gold-dim); }
+        .req-info .req-label { font-weight: 700; color: var(--text); margin-bottom: 2px; }
+        .req-info .req-val { color: var(--cyan); font-size: 0.8rem; }
+        .recruit-cta {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            text-align: center;
+        }
+        .recruit-cta h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; margin-bottom: 12px; }
+        .recruit-cta p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 24px; }
+        .btn-apply {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--cyan), #009688);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-apply:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,195,182,0.35); }
+        .recruit-note { margin-top: 16px; font-size: 0.75rem; color: var(--muted2); }
+
+        /* ─── SEARCH ─── */
+        .search-wrap { max-width: 480px; margin: 0 auto; }
         .search-box { display: flex; gap: 10px; }
-        input { flex: 1; padding: 15px; border: 2px solid var(--secondary-color); border-radius: 8px; background-color: var(--card-bg); color: white; font-size: 16px; outline: none; transition: border-color 0.3s; }
-        input:focus { border-color: var(--accent-color); }
+        input {
+            flex: 1;
+            padding: 13px 18px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus { border-color: var(--border-bright); }
+        input::placeholder { color: var(--muted); }
+        .btn-search {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 10px;
+            background: var(--cyan);
+            color: #000;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+        }
+        .btn-search:hover { background: var(--cyan-bright); }
+        .btn-search:active { transform: scale(0.97); }
+        .search-hint { text-align: center; margin-top: 14px; font-size: 0.75rem; color: var(--muted2); }
 
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; background-color: var(--accent-color); color: #000; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: transform 0.1s, background-color 0.3s; }
-        .btn:hover { background-color: var(--accent-hover); }
-        .btn:active { transform: scale(0.95); }
-
-        /* --- MODAL --- */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 2000; backdrop-filter: blur(5px); align-items: center; justify-content: center; }
-        .modal-content { background-color: var(--card-bg); width: 100%; max-width: 500px; border-radius: 12px; padding: 30px; box-sizing: border-box; border-top: 4px solid var(--accent-color); position: relative; margin: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 30px; color: var(--text-muted); cursor: pointer; }
-        .close-modal:hover { color: var(--error-color); }
-        .modal h2 { margin-top: 0; text-transform: uppercase; color: var(--gold); }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; border-bottom: 1px solid var(--secondary-color); }
-        th { color: var(--text-muted); text-align: left; font-weight: 600; }
-        td { font-weight: bold; text-align: right; }
+        /* ─── MODAL ─── */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 16px; }
+        .modal-content {
+            background: var(--card);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid var(--border-bright);
+            border-top: 3px solid var(--cyan);
+            position: relative;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+        }
+        .close-modal {
+            position: absolute;
+            top: 16px; right: 20px;
+            font-size: 1.5rem;
+            color: var(--muted);
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .close-modal:hover { color: var(--red); }
+        .modal h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        .modal h2 span { color: var(--cyan); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+        th { color: var(--muted); text-align: left; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { font-weight: 600; text-align: right; font-size: 0.9rem; }
         td:first-child, th:first-child { text-align: left; }
-        .highlight { color: var(--accent-color); }
+        .highlight { color: var(--cyan); }
+        .loading { color: var(--cyan); text-align: center; padding: 30px 0; font-size: 0.9rem; font-style: italic; }
+        .error-msg { color: var(--red); background: rgba(255,71,87,0.08); padding: 14px; border-radius: 8px; border: 1px solid rgba(255,71,87,0.3); margin-top: 10px; font-size: 0.88rem; }
 
-        .loading { color: var(--accent-color); font-style: italic; text-align: center; padding: 20px 0; font-weight: bold; letter-spacing: 1px;}
-        .error-msg { color: var(--error-color); background: rgba(255, 71, 87, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--error-color); margin-top: 10px; }
+        /* ─── FOOTER ─── */
+        footer {
+            width: 100%;
+            border-top: 1px solid var(--border);
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--muted2);
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+        }
+        footer span { color: var(--muted); }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            .navbar { flex-direction: column; gap: 15px; padding: 15px; }
-            .nav-links { justify-content: center; }
-            .main-title { font-size: 3.5rem; }
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 16px; }
+            .nav-links a { padding: 5px 8px; font-size: 0.75rem; }
+            .hero { min-height: auto; padding: 60px 16px 80px; }
+            .recruit-layout { grid-template-columns: 1fr; }
+            .section { padding: 60px 16px; }
+            .hero-stats { gap: 12px; }
+            .hero-stat { padding: 14px 18px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="nav-logo">NOTSWEATY</div>
-        <div class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#roster">Roster</a>
-            <a href="#links">Links</a>
-            <a href="#search">Search</a>
-        </div>
-    </nav>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-logo">NOTSWEATY</div>
+    <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#roster">Roster</a>
+        <a href="#news">News</a>
+        <a href="#media">Media</a>
+        <a href="#recruit">Join</a>
+        <a href="#search" class="nav-cta">Search</a>
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</div>
+    </div>
+</nav>
 
-    <!-- HERO SECTION -->
-    <div id="home" class="hero">
-        <div class="hero-content">
-            <h1 class="main-title">NOTSWEATY</h1>
-            <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. A community built on dedication, teamwork, and competitive excellence.</p>
+<!-- HERO -->
+<div id="home" class="hero">
+    <div class="hero-badge"><span class="pulse"></span> Active Clan · Jartex Network</div>
+    <h1 class="main-title">NOTSWEATY</h1>
+    <p class="hero-sub">A premier <strong>BedWars clan</strong> built on dedication, teamwork, and competitive excellence — without the toxicity.</p>
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="num gold">20</div>
+            <div class="label">Members</div>
+        </div>
+        <div class="hero-stat">
+            <div class="num">3</div>
+            <div class="label">Commanders</div>
         </div>
     </div>
+</div>
 
-    <!-- ABOUT SECTION -->
-    <div id="about" class="content-section">
-        <h2 class="section-header"><span>About</span> <span class="gold-text">Us</span></h2>
-        <p class="about-text">
-            We are <strong>NOTSWEATY</strong>, a premier Bedwars clan bringing together highly skilled players who share a passion for competitive gameplay. 
-            Our goal is to dominate the leaderboards while maintaining a supportive, active, and strictly non-toxic environment. 
-            Browse our site to check out our ranks, lookup live statistics, or connect with us on our social platforms.
-        </p>
+<!-- ABOUT -->
+<div id="about" class="full-width-section">
+    <div class="section">
+        <div class="section-eyebrow">About the Clan</div>
+        <div class="section-header-row">
+            <div>
+                <div class="section-title">Who we <span class="cyan">are</span></div>
+                <p class="section-desc">NOTSWEATY brings together elite BedWars players who share a passion for competitive gameplay. We dominate leaderboards while maintaining a supportive, active, and strictly non-toxic environment. Skill meets community here.</p>
+            </div>
+        </div>
     </div>
+</div>
 
-    <!-- ROSTER SECTION -->
-    <div id="roster" class="content-section">
-        <h2 class="section-header">Official <span>Clan Members</span></h2>
-        
-        <div class="rank-title leader">👑 Clan Leader</div>
+<!-- LEADERBOARD -->
+<div id="leaderboard" class="full-width-section">
+    <div class="section">
+        <div class="section-eyebrow">Internal Rankings</div>
+        <div class="section-header-row">
+            <div>
+                <div class="section-title">Clan <span class="gold">Leaderboard</span></div>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <div class="lb-controls" id="lb-controls">
+                    <button class="lb-btn active" onclick="setLbStat('fkdr')">FKDR</button>
+                    <button class="lb-btn" onclick="setLbStat('wlr')">WLR</button>
+                    <button class="lb-btn" onclick="setLbStat('wins')">Wins</button>
+                    <button class="lb-btn" onclick="setLbStat('final_kills')">Final Kills</button>
+                </div>
+                <button class="lb-load-btn" id="lb-load-btn" onclick="loadLeaderboard()">⚡ Load All Stats</button>
+            </div>
+        </div>
+        <div id="lb-table-wrap">
+            <div class="lb-loading">Click "Load All Stats" to fetch live rankings from the API.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ROSTER -->
+<div id="roster" class="full-width-section">
+    <div class="section">
+        <div class="section-eyebrow">Team</div>
+        <div class="section-title" style="margin-bottom:8px;">Official <span class="cyan">Members</span></div>
+
+        <div class="rank-divider" style="margin-top:40px;">
+            <div class="rank-divider-line"></div>
+            <div class="rank-divider-label leader">👑 Clan Leader</div>
+            <div class="rank-divider-line"></div>
+        </div>
         <div id="leader-grid" class="grid grid-leader"></div>
 
-        <div class="rank-title commanders">⚔️ Commanders</div>
+        <div class="rank-divider">
+            <div class="rank-divider-line"></div>
+            <div class="rank-divider-label commander">⚔️ Commanders</div>
+            <div class="rank-divider-line"></div>
+        </div>
         <div id="commanders-grid" class="grid grid-commanders"></div>
 
-        <div class="rank-title members">🛡️ Members</div>
+        <div class="rank-divider">
+            <div class="rank-divider-line"></div>
+            <div class="rank-divider-label member">🛡️ Members</div>
+            <div class="rank-divider-line"></div>
+        </div>
         <div id="members-grid" class="grid grid-members"></div>
     </div>
+</div>
 
-    <!-- LINKS SECTION -->
-    <div id="links" class="content-section">
-        <h2 class="section-header">Social <span class="gold-text">Links</span></h2>
-        <div class="links-container">
-            <a href="https://www.youtube.com/@Noot_Penguin-z4t" target="_blank" class="yt-btn">
-                ▶ YouTube - Noot_Penguin
-            </a>
-            <!-- Puoi aggiungere altri pulsanti qui in futuro (Discord, Twitch, ecc.) -->
+<!-- NEWS -->
+<div id="news" class="full-width-section">
+    <div class="section">
+        <div class="section-eyebrow">Announcements</div>
+        <div class="section-title" style="margin-bottom:40px;">Clan <span class="cyan">News</span></div>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-meta">
+                    <span class="news-tag tag-new">New Member</span>
+                    <span class="news-date">June 2025</span>
+                </div>
+                <div class="news-title">Thaazin joins the ranks</div>
+                <div class="news-body">We're thrilled to welcome Thaazin to NOTSWEATY. Already showing impressive FKDR numbers. Looking forward to seeing what they bring to competitive play.</div>
+            </div>
+            <div class="news-card">
+                <div class="news-meta">
+                    <span class="news-tag tag-event">Event</span>
+                    <span class="news-date">May 2025</span>
+                </div>
+                <div class="news-title">Internal 1v1 Tournament — Results</div>
+                <div class="news-body">Our first internal bracket wrapped up with fierce competition. Congratulations to all participants. Stay tuned for the next edition — we're making it bigger.</div>
+            </div>
+            <div class="news-card">
+                <div class="news-meta">
+                    <span class="news-tag tag-update">Update</span>
+                    <span class="news-date">April 2025</span>
+                </div>
+                <div class="news-title">Site relaunch with live stats</div>
+                <div class="news-body">The official NOTSWEATY hub is live with real-time stat lookups, a dynamic internal leaderboard, and recruitment info. More features are on the way.</div>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- BOTTOM SEARCH SECTION -->
-    <div id="search" class="content-section bottom-section">
-        <h2 class="section-header">Player <span>Search</span></h2>
-        
-        <div class="global-loading">ℹ️ Click "Load Stats" inside a member's card or use the search below to view live statistics.</div>
+<!-- MEDIA -->
+<div id="media" class="full-width-section">
+    <div class="section">
+        <div class="section-eyebrow">Highlights</div>
+        <div class="section-title" style="margin-bottom:40px;">Media <span class="gold">Gallery</span></div>
+        <div class="media-grid">
+            <div class="media-card">
+                <div class="media-embed">
+                    <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=Noot_Penguin-z4t" allowfullscreen title="Noot_Penguin YouTube"></iframe>
+                </div>
+                <div class="media-info">
+                    <div class="media-title">Latest from Noot_Penguin</div>
+                    <div class="media-by">Commander · YouTube</div>
+                </div>
+            </div>
+            <div class="media-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; padding:32px; min-height:220px; background:var(--card); border: 1px dashed var(--border);">
+                <div style="font-size:2rem; margin-bottom:12px; opacity:0.3;">🎬</div>
+                <div style="font-size:0.85rem; color:var(--muted2); text-align:center;">More clips coming soon.<br>Submit your highlights in Discord.</div>
+            </div>
+            <div class="media-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; padding:32px; min-height:220px; background:var(--card); border: 1px dashed var(--border);">
+                <div style="font-size:2rem; margin-bottom:12px; opacity:0.3;">🎬</div>
+                <div style="font-size:0.85rem; color:var(--muted2); text-align:center;">Your clip here.<br>Stand out — share your best plays.</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <div class="search-container">
+<!-- LINKS -->
+<div id="links" class="full-width-section">
+    <div class="section" style="text-align:center;">
+        <div class="section-eyebrow">Connect</div>
+        <div class="section-title" style="margin-bottom:32px;">Social <span class="gold">Links</span></div>
+        <div class="links-grid">
+            <a href="https://www.youtube.com/@Noot_Penguin-z4t" target="_blank" class="social-btn yt-btn">▶ YouTube — Noot_Penguin</a>
+            <a href="#recruit" class="social-btn discord-btn">💬 Join our Discord</a>
+        </div>
+    </div>
+</div>
+
+<!-- RECRUITMENT -->
+<div id="recruit" class="full-width-section">
+    <div class="section">
+        <div class="section-eyebrow">Open Applications</div>
+        <div class="section-title" style="margin-bottom:40px;">Join <span class="cyan">NOTSWEATY</span></div>
+        <div class="recruit-layout">
+            <div>
+                <p style="color:var(--muted); font-size:0.88rem; margin-bottom:24px; line-height:1.7;">Think you have what it takes? Below are our minimum requirements. We review every application and look for players who bring both skill and a positive attitude.</p>
+                <div class="req-list">
+                    <div class="req-item">
+                        <div class="req-icon cyan">⚔️</div>
+                        <div class="req-info">
+                            <div class="req-label">FKDR (Final Kill/Death Ratio)</div>
+                            <div class="req-val">Minimum 3.0+ FKDR</div>
+                        </div>
+                    </div>
+                    <div class="req-item">
+                        <div class="req-icon gold">🏆</div>
+                        <div class="req-info">
+                            <div class="req-label">Win/Loss Ratio</div>
+                            <div class="req-val">Minimum 2.5+ WLR</div>
+                        </div>
+                    </div>
+                    <div class="req-item">
+                        <div class="req-icon cyan">📊</div>
+                        <div class="req-info">
+                            <div class="req-label">Total Wins</div>
+                            <div class="req-val">At least 500 wins on Jartex</div>
+                        </div>
+                    </div>
+                    <div class="req-item">
+                        <div class="req-icon gold">🎮</div>
+                        <div class="req-info">
+                            <div class="req-label">Activity</div>
+                            <div class="req-val">Regular daily/weekly play</div>
+                        </div>
+                    </div>
+                    <div class="req-item">
+                        <div class="req-icon cyan">🤝</div>
+                        <div class="req-info">
+                            <div class="req-label">Attitude</div>
+                            <div class="req-val">Zero toxicity — team player mentality</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="recruit-cta">
+                <div style="font-size:2.5rem; margin-bottom:16px;">🛡️</div>
+                <h3>Ready to Apply?</h3>
+                <p>Join our Discord server, open a ticket in the #apply channel, and paste your IGN. A commander will review your stats and reach out within 48 hours.</p>
+                <a href="#links" class="btn-apply">Apply via Discord</a>
+                <div class="recruit-note">Applications are reviewed by our commanders. Skill alone isn't enough — attitude matters too.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SEARCH -->
+<div id="search" class="full-width-section">
+    <div class="section" style="text-align:center; padding-bottom:100px;">
+        <div class="section-eyebrow">Live Lookup</div>
+        <div class="section-title" style="margin-bottom:32px;">Player <span class="cyan">Search</span></div>
+        <div class="search-wrap">
             <div class="search-box">
-                <input type="text" id="customUsername" placeholder="Search any player..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
-                <button class="btn" onclick="fetchLivePlayerStats(document.getElementById('customUsername').value)">Search</button>
+                <input type="text" id="customUsername" placeholder="Enter any player name..." onkeydown="if(event.key==='Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
+                <button class="btn-search" onclick="fetchLivePlayerStats(document.getElementById('customUsername').value)">Search</button>
             </div>
+            <div class="search-hint">Stats are fetched live from the JartexAPI. Press Enter or click Search.</div>
         </div>
     </div>
+</div>
 
-    <!-- STATS MODAL -->
-    <div id="statsModal" class="modal" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
-            <div id="modalLoading" class="loading">Loading stats, please wait...</div>
-            <div id="modalError" class="error-msg" style="display:none;"></div>
-            
-            <div id="modalData" style="display:none;">
-                <h2>Player: <span id="res-player" style="color: white;">-</span></h2>
-                <table>
-                    <tbody>
-                        <tr><td>Wins</td><td id="stat-wins" class="highlight">-</td></tr>
-                        <tr><td>Losses</td><td id="stat-losses">-</td></tr>
-                        <tr><td>WLR (Win/Loss)</td><td id="stat-wlr">-</td></tr>
-                        <tr><td>Final Kills</td><td id="stat-final-kills" class="highlight">-</td></tr>
-                        <tr><td>Highest Winstreak</td><td id="stat-ws">-</td></tr>
-                        <tr><td>Beds Destroyed</td><td id="stat-beds">-</td></tr>
-                        <tr><td>Regular Kills</td><td id="stat-kills">-</td></tr>
-                        <tr><td>Regular Deaths</td><td id="stat-deaths">-</td></tr>
-                        <tr><td>Ratios</td><td id="stat-ratios">-</td></tr>
-                    </tbody>
-                </table>
-            </div>
+<!-- FOOTER -->
+<footer>
+    <span>NOTSWEATY</span> · BedWars Clan · Jartex Network · 2025
+</footer>
+
+<!-- STATS MODAL -->
+<div id="statsModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="close-modal" onclick="document.getElementById('statsModal').style.display='none'">&times;</span>
+        <div id="modalLoading" class="loading">Fetching stats…</div>
+        <div id="modalError" class="error-msg" style="display:none;"></div>
+        <div id="modalData" style="display:none;">
+            <h2>Stats — <span id="res-player">-</span></h2>
+            <table>
+                <tbody>
+                    <tr><td>Wins</td><td id="stat-wins" class="highlight">-</td></tr>
+                    <tr><td>Losses</td><td id="stat-losses">-</td></tr>
+                    <tr><td>WLR</td><td id="stat-wlr">-</td></tr>
+                    <tr><td>Final Kills</td><td id="stat-final-kills" class="highlight">-</td></tr>
+                    <tr><td>Highest Winstreak</td><td id="stat-ws">-</td></tr>
+                    <tr><td>Beds Destroyed</td><td id="stat-beds">-</td></tr>
+                    <tr><td>Regular Kills</td><td id="stat-kills">-</td></tr>
+                    <tr><td>Regular Deaths</td><td id="stat-deaths">-</td></tr>
+                    <tr><td>KDR / FKDR</td><td id="stat-ratios">-</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    <script>
-        const API_URL = "https://jartexapi2-0.onrender.com/api/stats/";
-        const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+<script>
+const API_URL   = "https://jartexapi2-0.onrender.com/api/stats/";
+const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
-        const clanRoles = {
-            leader: ["Krishiv00"],
-            commanders: ["Massimo00875", "Valerioita", "Noot_Penguin"],
-            members: ["Vexral0", "Capta1nLeViI", "c41v", "grumen", "Whish3", "Ghostqx", "Kosticcc", "gingeler39", "Rock_Gamer", "_Mimero_", "I_quit", "iDesk76", "ManuelCCTV", "_Zenux", "14elo_", "luca05", "Thaazin"]
-        };
+const clanRoles = {
+    leader:     ["Krishiv00"],
+    commanders: ["Massimo00875", "Valerioita", "Noot_Penguin"],
+    members:    ["Vexral0","Capta1nLeViI","c41v","grumen","Whish3","Ghostqx","Kosticcc","gingeler39","Rock_Gamer","_Mimero_","I_quit","iDesk76","ManuelCCTV","_Zenux","14elo_","luca05","Thaazin"]
+};
 
-        let liveClanData = {}; 
+const allPlayers = [
+    ...clanRoles.leader.map(n=>({name:n,role:"leader"})),
+    ...clanRoles.commanders.map(n=>({name:n,role:"commander"})),
+    ...clanRoles.members.map(n=>({name:n,role:"member"}))
+];
 
-        function buildInitialGrids() {
-            generatePlaceholderGrid(clanRoles.leader, document.getElementById("leader-grid"));
-            generatePlaceholderGrid(clanRoles.commanders, document.getElementById("commanders-grid"));
-            generatePlaceholderGrid(clanRoles.members, document.getElementById("members-grid"));
+let liveClanData = {};
+let currentLbStat = "fkdr";
+let lbLoaded = false;
+
+/* ─── FETCH ─── */
+async function fetchPlayerData(player) {
+    try {
+        const r = await fetch(API_URL + player);
+        if (r.ok) return await r.json();
+    } catch(e){}
+    try {
+        const r = await fetch(CORS_PROXY + encodeURIComponent(API_URL + player));
+        if (r.ok) return await r.json();
+    } catch(e){}
+    return null;
+}
+
+/* ─── ROSTER ─── */
+function buildInitialGrids() {
+    generatePlaceholderGrid(clanRoles.leader, document.getElementById("leader-grid"));
+    generatePlaceholderGrid(clanRoles.commanders, document.getElementById("commanders-grid"));
+    generatePlaceholderGrid(clanRoles.members, document.getElementById("members-grid"));
+}
+
+function generatePlaceholderGrid(playerList, container) {
+    container.innerHTML = "";
+    playerList.forEach(player => {
+        const card = document.createElement("div");
+        card.className = "player-card";
+        card.id = `card-${player.toLowerCase()}`;
+        card.innerHTML = `
+            <div class="player-avatar">${player[0].toUpperCase()}</div>
+            <div class="player-name">${player}</div>
+            <div class="mini-stats">
+                <div><span>WLR</span><span class="val style-wlr">—</span></div>
+                <div><span>FKDR</span><span class="val style-fkdr">—</span></div>
+                <div><span>KDR</span><span class="val style-kdr">—</span></div>
+            </div>
+            <div class="card-actions">
+                <button class="btn-sm load-btn" onclick="loadSingleCardStats('${player}')">Load</button>
+                <button class="btn-sm" onclick="showPlayerDetails('${player}')">Full Stats</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+async function loadSingleCardStats(username) {
+    const card = document.getElementById(`card-${username.toLowerCase()}`);
+    if (!card) return;
+    card.querySelectorAll(".val").forEach(s => { s.innerText = "…"; s.classList.remove("error"); });
+    const data = await fetchPlayerData(username);
+    if (data && data.stats) {
+        liveClanData[username.toLowerCase()] = data;
+        updatePlayerCardUI(username, data.stats);
+        if (lbLoaded) renderLeaderboard();
+    } else {
+        showErrorOnCardUI(username);
+    }
+}
+
+function updatePlayerCardUI(username, stats) {
+    const card = document.getElementById(`card-${username.toLowerCase()}`);
+    if (!card) return;
+    const lb = card.querySelector(".load-btn");
+    if (lb) lb.style.display = "none";
+    const wlrEl  = card.querySelector(".style-wlr");
+    const fkdrEl = card.querySelector(".style-fkdr");
+    const kdrEl  = card.querySelector(".style-kdr");
+    if (wlrEl)  { wlrEl.innerText  = stats.wlr  || "0.00"; wlrEl.style.color  = "var(--gold)"; }
+    if (fkdrEl) { fkdrEl.innerText = stats.fkdr || "0.00"; fkdrEl.style.color = "var(--cyan)"; }
+    if (kdrEl)  { kdrEl.innerText  = stats.kdr  || "0.00"; }
+}
+
+function showErrorOnCardUI(username) {
+    const card = document.getElementById(`card-${username.toLowerCase()}`);
+    if (!card) return;
+    card.querySelectorAll(".val").forEach(s => { s.innerText = "ERR"; s.classList.add("error"); });
+}
+
+/* ─── LEADERBOARD ─── */
+function setLbStat(stat) {
+    currentLbStat = stat;
+    document.querySelectorAll(".lb-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".lb-btn").forEach(b => {
+        if (b.textContent.toLowerCase().replace(/[^a-z_]/g,'') === stat.replace(' ','_').toLowerCase() ||
+            b.onclick.toString().includes(`'${stat}'`)) b.classList.add("active");
+    });
+    if (lbLoaded) renderLeaderboard();
+}
+
+document.querySelectorAll(".lb-btn").forEach(btn => {
+    btn.addEventListener("click", function() {
+        document.querySelectorAll(".lb-btn").forEach(b=>b.classList.remove("active"));
+        this.classList.add("active");
+    });
+});
+
+async function loadLeaderboard() {
+    const btn = document.getElementById("lb-load-btn");
+    btn.disabled = true;
+    btn.textContent = "Loading…";
+    const wrap = document.getElementById("lb-table-wrap");
+    wrap.innerHTML = '<div class="lb-loading">Fetching stats for all members…</div>';
+
+    const fetches = allPlayers.map(async p => {
+        const data = await fetchPlayerData(p.name);
+        if (data && data.stats) {
+            liveClanData[p.name.toLowerCase()] = data;
+            updatePlayerCardUI(p.name, data.stats);
         }
+        return { ...p, data };
+    });
 
-        function generatePlaceholderGrid(playerList, container) {
-            container.innerHTML = "";
-            playerList.forEach(player => {
-                const card = document.createElement("div");
-                card.className = "player-card";
-                card.id = `card-${player.toLowerCase()}`;
-                card.innerHTML = `
-                    <div class="player-name">${player}</div>
-                    <div class="mini-stats">
-                        <div><span>WLR:</span><span class="val style-wlr">-</span></div>
-                        <div><span>FKDR:</span><span class="val style-fkdr">-</span></div>
-                        <div><span>KDR:</span><span class="val style-kdr">-</span></div>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn-sm load-btn" onclick="loadSingleCardStats('${player}')">Load Stats</button>
-                        <button class="btn-sm" onclick="showPlayerDetails('${player}')">Full Stats</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
+    await Promise.all(fetches);
+    lbLoaded = true;
+    btn.textContent = "↻ Refresh";
+    btn.disabled = false;
+    renderLeaderboard();
+}
 
-        async function fetchPlayerData(player) {
-            const primaryUrl = `${API_URL}${player}`;
-            const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
+function getStatValue(data, stat) {
+    if (!data || !data.stats) return null;
+    const s = data.stats;
+    const map = { fkdr:'fkdr', wlr:'wlr', wins:'wins', final_kills:'final_kills', kdr:'kdr' };
+    const key = map[stat] || stat;
+    const v = s[key];
+    return v !== undefined ? parseFloat(v) : null;
+}
 
-            try {
-                const response = await fetch(primaryUrl);
-                if (response.ok) return await response.json();
-            } catch (e) {}
+function renderLeaderboard() {
+    const rows = allPlayers.map(p => {
+        const d = liveClanData[p.name.toLowerCase()];
+        return { ...p, val: getStatValue(d, currentLbStat) };
+    }).filter(r => r.val !== null).sort((a,b) => b.val - a.val);
 
-            try {
-                const response = await fetch(fallbackUrl);
-                if (response.ok) return await response.json();
-            } catch (e) {}
+    if (!rows.length) {
+        document.getElementById("lb-table-wrap").innerHTML = '<div class="lb-loading">No stats loaded yet.</div>';
+        return;
+    }
 
-            return null;
-        }
+    const maxVal = rows[0].val || 1;
+    const pillMap = { leader: 'pill-leader', commander: 'pill-commander', member: 'pill-member' };
+    const pillLabel = { leader: 'Leader', commander: 'Commander', member: 'Member' };
+    const statLabel = { fkdr:'FKDR', wlr:'WLR', wins:'Wins', final_kills:'Final Kills', kdr:'KDR' };
 
-        async function loadSingleCardStats(username) {
-            const card = document.getElementById(`card-${username.toLowerCase()}`);
-            if (!card) return;
+    let html = `
+        <table class="leaderboard-table">
+        <thead>
+            <tr>
+                <th style="width:48px;">#</th>
+                <th>Player</th>
+                <th style="text-align:right;">${statLabel[currentLbStat] || currentLbStat}</th>
+                <th class="lb-bar-cell" style="text-align:right;">Chart</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
 
-            const spans = card.querySelectorAll(".val");
-            spans.forEach(span => { span.innerText = "Loading..."; span.classList.remove("error"); });
+    rows.forEach((r, i) => {
+        const rank = i + 1;
+        const rankClass = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : 'other';
+        const rankIcon  = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+        const pct = Math.round((r.val / maxVal) * 100);
+        const isFloat = currentLbStat !== 'wins' && currentLbStat !== 'final_kills';
+        const display = isFloat ? r.val.toFixed(2) : Math.round(r.val).toLocaleString();
+        html += `
+            <tr onclick="showPlayerDetails('${r.name}')">
+                <td><span class="lb-rank ${rankClass}">${rankIcon}</span></td>
+                <td class="lb-player">${r.name}<span class="lb-role-pill ${pillMap[r.role]}">${pillLabel[r.role]}</span></td>
+                <td class="lb-value ${currentLbStat === 'wins' || currentLbStat === 'final_kills' ? 'gold' : ''}">${display}</td>
+                <td class="lb-bar-cell"><div class="lb-bar-wrap"><div class="lb-bar" style="width:${pct}%"></div></div></td>
+            </tr>
+        `;
+    });
 
-            const data = await fetchPlayerData(username);
-            
-            if (data && data.stats) {
-                liveClanData[username.toLowerCase()] = data;
-                updatePlayerCardUI(username, data.stats);
-            } else {
-                showErrorOnCardUI(username);
-            }
-        }
+    html += '</tbody></table>';
+    document.getElementById("lb-table-wrap").innerHTML = html;
+}
 
-        function updatePlayerCardUI(username, stats) {
-            const card = document.getElementById(`card-${username.toLowerCase()}`);
-            if (!card) return;
-            
-            const btn = card.querySelector(".load-btn");
-            if(btn) btn.style.display = "none";
+/* ─── MODAL ─── */
+function showPlayerDetails(username) {
+    const d = liveClanData[username.toLowerCase()];
+    if (d) {
+        populateModal(d, username);
+    } else {
+        fetchLivePlayerStats(username);
+    }
+}
 
-            card.querySelector(".style-wlr").innerText = stats.wlr || "0.00";
-            card.querySelector(".style-wlr").style.color = "var(--gold)";
-            
-            card.querySelector(".style-fkdr").innerText = stats.fkdr || "0.00";
-            card.querySelector(".style-fkdr").style.color = "var(--accent-color)";
-            
-            card.querySelector(".style-kdr").innerText = stats.kdr || "0.00";
-        }
+function populateModal(d, username) {
+    const s = d.stats;
+    document.getElementById("modalLoading").style.display = "none";
+    document.getElementById("modalError").style.display = "none";
+    document.getElementById("res-player").innerText = d.giocatore || username;
+    document.getElementById("stat-wins").innerText        = s.wins || "0";
+    document.getElementById("stat-losses").innerText      = s.losses || "0";
+    document.getElementById("stat-wlr").innerText         = s.wlr || "0";
+    document.getElementById("stat-final-kills").innerText = s.final_kills || "0";
+    document.getElementById("stat-ws").innerText          = s.highest_ws || s.highest_winstreak || "0";
+    document.getElementById("stat-beds").innerText        = s.beds_destroyed || "0";
+    document.getElementById("stat-kills").innerText       = s.kills || "0";
+    document.getElementById("stat-deaths").innerText      = s.deaths || "0";
+    document.getElementById("stat-ratios").innerText      = `KDR: ${s.kdr||0} · FKDR: ${s.fkdr||0}`;
+    document.getElementById("modalData").style.display = "block";
+    document.getElementById("statsModal").style.display = "flex";
+}
 
-        function showErrorOnCardUI(username) {
-            const card = document.getElementById(`card-${username.toLowerCase()}`);
-            if (!card) return;
-            const spans = card.querySelectorAll(".val");
-            spans.forEach(span => {
-                span.innerText = "ERR";
-                span.classList.add("error");
-            });
-        }
+async function fetchLivePlayerStats(username) {
+    username = username.trim();
+    if (!username) return;
+    const modal   = document.getElementById("statsModal");
+    const loading = document.getElementById("modalLoading");
+    const errDiv  = document.getElementById("modalError");
+    const dataDiv = document.getElementById("modalData");
+    modal.style.display = "flex";
+    loading.style.display = "block";
+    errDiv.style.display  = "none";
+    dataDiv.style.display = "none";
+    try {
+        const data = await fetchPlayerData(username);
+        if (!data || data.errore) throw new Error(data?.messaggio || "Player not found.");
+        liveClanData[username.toLowerCase()] = data;
+        const card = document.getElementById(`card-${username.toLowerCase()}`);
+        if (card) updatePlayerCardUI(username, data.stats);
+        loading.style.display = "none";
+        populateModal(data, username);
+    } catch(err) {
+        loading.style.display = "none";
+        errDiv.innerText = err.message;
+        errDiv.style.display = "block";
+    }
+}
 
-        function showPlayerDetails(username) {
-            const lowerName = username.toLowerCase();
-            if (liveClanData[lowerName]) {
-                const d = liveClanData[lowerName];
-                const stats = d.stats;
-                const modal = document.getElementById("statsModal");
-                document.getElementById("modalLoading").style.display = "none";
-                document.getElementById("modalError").style.display = "none";
-                
-                document.getElementById("res-player").innerText = d.giocatore || username;
-                document.getElementById("stat-wins").innerText = stats.wins || "0";
-                document.getElementById("stat-losses").innerText = stats.losses || "0";
-                document.getElementById("stat-wlr").innerText = stats.wlr || "0";
-                document.getElementById("stat-final-kills").innerText = stats.final_kills || "0";
-                document.getElementById("stat-ws").innerText = stats.highest_ws || stats.highest_winstreak || "0";
-                document.getElementById("stat-beds").innerText = stats.beds_destroyed || "0";
-                document.getElementById("stat-kills").innerText = stats.kills || "0";
-                document.getElementById("stat-deaths").innerText = stats.deaths || "0";
-                document.getElementById("stat-ratios").innerText = `KDR: ${stats.kdr || 0} | FKDR: ${stats.fkdr || 0}`;
-                
-                document.getElementById("modalData").style.display = "block";
-                modal.style.display = "flex";
-            } else {
-                fetchLivePlayerStats(username);
-            }
-        }
+function closeModal(e) { document.getElementById("statsModal").style.display = "none"; }
 
-        async function fetchLivePlayerStats(username) {
-            username = username.trim();
-            if (!username) return;
+/* ─── THEME ─── */
+function toggleTheme() {
+    document.body.classList.toggle("light");
+    document.querySelector(".theme-toggle").textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+}
 
-            const modal = document.getElementById("statsModal");
-            const loading = document.getElementById("modalLoading");
-            const errorDiv = document.getElementById("modalError");
-            const dataDiv = document.getElementById("modalData");
-
-            modal.style.display = "flex";
-            loading.style.display = "block";
-            errorDiv.style.display = "none";
-            dataDiv.style.display = "none";
-
-            try {
-                const data = await fetchPlayerData(username);
-                if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato.");
-
-                liveClanData[username.toLowerCase()] = data;
-                
-                const card = document.getElementById(`card-${username.toLowerCase()}`);
-                if(card) updatePlayerCardUI(username, data.stats);
-
-                document.getElementById("res-player").innerText = data.giocatore;
-                document.getElementById("stat-wins").innerText = data.stats.wins;
-                document.getElementById("stat-losses").innerText = data.stats.losses;
-                document.getElementById("stat-wlr").innerText = data.stats.wlr;
-                document.getElementById("stat-final-kills").innerText = data.stats.final_kills;
-                document.getElementById("stat-ws").innerText = data.stats.highest_ws || data.stats.highest_winstreak || "0";
-                document.getElementById("stat-beds").innerText = data.stats.beds_destroyed;
-                document.getElementById("stat-kills").innerText = data.stats.kills;
-                document.getElementById("stat-deaths").innerText = data.stats.deaths;
-                document.getElementById("stat-ratios").innerText = `KDR: ${data.stats.kdr} | FKDR: ${data.stats.fkdr}`;
-
-                loading.style.display = "none";
-                dataDiv.style.display = "block";
-            } catch (err) {
-                loading.style.display = "none";
-                errorDiv.innerText = err.message;
-                errorDiv.style.display = "block";
-            }
-        }
-
-        function closeModal(event) {
-            document.getElementById("statsModal").style.display = "none";
-        }
-
-        window.onload = function() {
-            buildInitialGrids();
-        };
-    </script>
+window.onload = buildInitialGrids;
+</script>
 </body>
 </html>
