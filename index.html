@@ -57,7 +57,8 @@
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .nav-links a {
@@ -83,7 +84,7 @@
             background-position: center;
             background-repeat: no-repeat;
             text-align: center; 
-            padding: 120px 20px 80px 20px; 
+            padding: 140px 20px 100px 20px; 
             box-sizing: border-box; 
             border-bottom: 1px solid var(--secondary-color);
         }
@@ -97,7 +98,7 @@
 
         .main-title {
             font-size: 5rem;
-            margin: 0 0 15px 0;
+            margin: 0;
             text-transform: uppercase;
             letter-spacing: 6px;
             /* Effetto gradiente Oro -> Ciano */
@@ -108,18 +109,57 @@
         }
 
         .hero p.tagline { 
-            font-size: 1.25rem; 
+            font-size: 1.3rem; 
             color: #ffffff; 
             max-width: 750px; 
-            margin: 0 auto; 
-            line-height: 1.7; 
+            margin: 40px auto 0 auto; /* Spazio aumentato per staccare il testo dal titolo */
+            line-height: 1.8; 
             text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         }
 
+        /* --- GLOBAL SECTION STYLING --- */
+        .content-section {
+            width: 100%;
+            max-width: 1050px;
+            padding: 60px 20px;
+            box-sizing: border-box;
+            border-bottom: 1px solid rgba(23, 42, 64, 0.5); /* Bordo sottile di separazione */
+        }
+
+        .section-header {
+            text-align: center;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 0;
+            margin-bottom: 40px;
+            color: var(--text-color);
+        }
+
+        .section-header span {
+            color: var(--accent-color);
+        }
+
+        .section-header .gold-text {
+            color: var(--gold);
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-text {
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-text strong {
+            color: var(--text-color);
+        }
+
         /* --- ROSTER SECTION --- */
-        .roster-section { width: 100%; max-width: 1000px; padding: 40px 20px 20px 20px; box-sizing: border-box; }
-        
-        .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 40px 0 25px 0; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
+        .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 40px 0 25px 0; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
         .rank-title.leader { color: var(--gold); }
         .rank-title.commanders { color: var(--silver); }
         .rank-title.members { color: var(--accent-color); }
@@ -145,15 +185,43 @@
         .btn-sm.load-btn:hover { background-color: var(--accent-color); color: #000; }
         .btn-sm:hover { background-color: var(--gold); border-color: var(--gold); color: #000; }
 
+        /* --- LINKS SECTION --- */
+        .links-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .yt-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #ff0000;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .yt-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+        }
+
         /* --- BOTTOM SEARCH SECTION --- */
         .bottom-section {
-            width: 100%;
-            max-width: 1000px;
-            padding: 20px 20px 80px 20px;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
+            border-bottom: none; /* Rimuove la linea dall'ultima sezione */
+            padding-bottom: 100px;
         }
 
         .global-loading { background: rgba(19, 26, 34, 0.8); border: 1px solid var(--secondary-color); padding: 12px; border-radius: 8px; max-width: 500px; margin: 0 auto 20px auto; text-align: center; font-size: 0.9rem; color: var(--text-muted); width: 100%; box-sizing: border-box;}
@@ -184,9 +252,10 @@
         .loading { color: var(--accent-color); font-style: italic; text-align: center; padding: 20px 0; font-weight: bold; letter-spacing: 1px;}
         .error-msg { color: var(--error-color); background: rgba(255, 71, 87, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--error-color); margin-top: 10px; }
 
-        /* Responsive Navbar */
+        /* Responsive */
         @media (max-width: 600px) {
             .navbar { flex-direction: column; gap: 15px; padding: 15px; }
+            .nav-links { justify-content: center; }
             .main-title { font-size: 3.5rem; }
         }
     </style>
@@ -198,7 +267,9 @@
         <div class="nav-logo">NOTSWEATY</div>
         <div class="nav-links">
             <a href="#home">Home</a>
+            <a href="#about">About</a>
             <a href="#roster">Roster</a>
+            <a href="#links">Links</a>
             <a href="#search">Search</a>
         </div>
     </nav>
@@ -207,25 +278,48 @@
     <div id="home" class="hero">
         <div class="hero-content">
             <h1 class="main-title">NOTSWEATY</h1>
-            <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. This space serves as our roster gallery to highlight our official team structure, leadership, and community members. Feel free to explore our line-up.</p>
+            <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. A community built on dedication, teamwork, and competitive excellence.</p>
         </div>
     </div>
 
+    <!-- ABOUT SECTION -->
+    <div id="about" class="content-section">
+        <h2 class="section-header"><span>About</span> <span class="gold-text">Us</span></h2>
+        <p class="about-text">
+            We are <strong>NOTSWEATY</strong>, a premier Bedwars clan bringing together highly skilled players who share a passion for competitive gameplay. 
+            Our goal is to dominate the leaderboards while maintaining a supportive, active, and strictly non-toxic environment. 
+            Browse our site to check out our ranks, lookup live statistics, or connect with us on our social platforms.
+        </p>
+    </div>
+
     <!-- ROSTER SECTION -->
-    <div id="roster" class="roster-section">
+    <div id="roster" class="content-section">
+        <h2 class="section-header">Official <span>Clan Members</span></h2>
+        
         <div class="rank-title leader">👑 Clan Leader</div>
         <div id="leader-grid" class="grid grid-leader"></div>
 
         <div class="rank-title commanders">⚔️ Commanders</div>
         <div id="commanders-grid" class="grid grid-commanders"></div>
 
-        <div class="rank-title members">🛡️ Clan Members</div>
+        <div class="rank-title members">🛡️ Members</div>
         <div id="members-grid" class="grid grid-members"></div>
     </div>
 
+    <!-- LINKS SECTION -->
+    <div id="links" class="content-section">
+        <h2 class="section-header">Social <span class="gold-text">Links</span></h2>
+        <div class="links-container">
+            <a href="https://www.youtube.com/@Noot_Penguin-z4t" target="_blank" class="yt-btn">
+                ▶ YouTube - Noot_Penguin
+            </a>
+            <!-- Puoi aggiungere altri pulsanti qui in futuro (Discord, Twitch, ecc.) -->
+        </div>
+    </div>
+
     <!-- BOTTOM SEARCH SECTION -->
-    <div id="search" class="bottom-section">
-        <div class="rank-title" style="color: var(--accent-color);">🔍 Player Search</div>
+    <div id="search" class="content-section bottom-section">
+        <h2 class="section-header">Player <span>Search</span></h2>
         
         <div class="global-loading">ℹ️ Click "Load Stats" inside a member's card or use the search below to view live statistics.</div>
 
@@ -410,7 +504,6 @@
 
                 liveClanData[username.toLowerCase()] = data;
                 
-                // Aggiorna anche la card se esiste
                 const card = document.getElementById(`card-${username.toLowerCase()}`);
                 if(card) updatePlayerCardUI(username, data.stats);
 
