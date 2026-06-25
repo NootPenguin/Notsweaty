@@ -6,15 +6,18 @@
     <title>NOTSWEATY CLAN - Official Hub</title>
     <style>
         :root {
-            --bg-color: #0a0c14;
-            --card-bg: #131722;
-            --accent-color: #ff4757;
-            --accent-hover: #ff6b81;
+            /* Colori estratti dal logo: Ciano, Oro, Blu scuro/Grigio scuro */
+            --bg-color: #0b0f14;
+            --card-bg: #131a22;
+            --accent-color: #00c3b6; /* Ciano/Teal del bordo */
+            --accent-hover: #00e5d6;
+            --secondary-color: #172a40; /* Blu scuro dello scudo */
             --text-color: #ffffff;
-            --text-muted: #7e84a3;
-            --success-color: #2ed573;
-            --gold: #ffa502;
+            --text-muted: #8b9bb4;
+            --success-color: #f1c40f; /* Oro della spada/testo */
+            --gold: #f1c40f;
             --silver: #ced6e0;
+            --error-color: #ff4757;
         }
 
         body {
@@ -28,18 +31,61 @@
             align-items: center;
         }
 
-        /* Qui ho inserito il tuo nuovo link dell'immagine .png */
+        /* --- NAVBAR --- */
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(11, 15, 20, 0.85);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-color);
+            box-sizing: border-box;
+        }
+
+        .nav-logo {
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* --- HERO SECTION --- */
         .hero { 
             width: 100%; 
             position: relative;
-            background-image: linear-gradient(rgba(10, 12, 20, 0.6), rgba(10, 12, 20, 0.9)), url('https://i.imgur.com/5dmrRJT.png');
+            background-image: linear-gradient(rgba(11, 15, 20, 0.7), rgba(11, 15, 20, 0.95)), url('https://i.imgur.com/5dmrRJT.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             text-align: center; 
-            padding: 100px 20px 60px 20px; 
+            padding: 120px 20px 80px 20px; 
             box-sizing: border-box; 
-            border-bottom: 2px solid #1e2235;
+            border-bottom: 1px solid var(--secondary-color);
         }
         
         .hero-content {
@@ -49,88 +95,124 @@
             margin: 0 auto;
         }
 
-        .hero p.tagline { 
-            font-size: 1.2rem; 
-            color: #ffffff; 
-            max-width: 750px; 
-            margin: 0 auto 30px auto; 
-            line-height: 1.7; 
-            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        .main-title {
+            font-size: 5rem;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            /* Effetto gradiente Oro -> Ciano */
+            background: linear-gradient(45deg, var(--gold), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0, 195, 182, 0.2);
         }
 
-        .search-container { width: 100%; max-width: 500px; margin: 0 auto 20px auto; }
-        .search-box { display: flex; gap: 10px; }
-        input { flex: 1; padding: 15px; border: 2px solid #1e2235; border-radius: 8px; background-color: rgba(19, 23, 34, 0.85); color: white; font-size: 16px; outline: none; backdrop-filter: blur(5px); transition: border-color 0.3s; }
-        input:focus { border-color: var(--accent-color); }
+        .hero p.tagline { 
+            font-size: 1.25rem; 
+            color: #ffffff; 
+            max-width: 750px; 
+            margin: 0 auto; 
+            line-height: 1.7; 
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
 
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; background-color: var(--accent-color); color: white; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: transform 0.1s, background-color 0.3s; }
-        .btn:hover { background-color: var(--accent-hover); }
-        .btn:active { transform: scale(0.95); }
-
-        .global-loading { background: rgba(19, 23, 34, 0.9); border: 1px solid #1e2235; padding: 12px; border-radius: 8px; max-width: 500px; margin: 0 auto 20px auto; text-align: center; font-size: 0.9rem; color: var(--text-muted); backdrop-filter: blur(5px); }
-
-        .roster-section { width: 100%; max-width: 1000px; padding: 0 20px 60px 20px; box-sizing: border-box; }
-        .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 50px 0 25px 0; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        /* --- ROSTER SECTION --- */
+        .roster-section { width: 100%; max-width: 1000px; padding: 40px 20px 20px 20px; box-sizing: border-box; }
+        
+        .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 40px 0 25px 0; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
         .rank-title.leader { color: var(--gold); }
         .rank-title.commanders { color: var(--silver); }
-        .rank-title.members { color: #54a0ff; }
-        .rank-title::before, .rank-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--text-muted), transparent); max-width: 150px; }
+        .rank-title.members { color: var(--accent-color); }
+        .rank-title::before, .rank-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--secondary-color), transparent); max-width: 150px; }
 
         .grid { display: grid; gap: 20px; }
         .grid-leader { grid-template-columns: 1fr; max-width: 350px; margin: 0 auto; }
         .grid-commanders { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
         .grid-members { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 
-        .player-card { background-color: var(--card-bg); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; border: 1px solid #1e2235; transition: border-color 0.3s, transform 0.3s; position: relative; }
-        .player-card:hover { border-color: var(--accent-color); transform: translateY(-3px); }
-        .player-name { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; text-align: center; word-break: break-all; }
+        .player-card { background-color: var(--card-bg); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--secondary-color); transition: border-color 0.3s, transform 0.3s; position: relative; }
+        .player-card:hover { border-color: var(--accent-color); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 195, 182, 0.1); }
+        .player-name { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; text-align: center; word-break: break-all; color: white; }
 
-        .mini-stats { width: 100%; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; border-top: 1px solid #1e2235; padding-top: 10px; }
+        .mini-stats { width: 100%; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; border-top: 1px solid var(--secondary-color); padding-top: 10px; }
         .mini-stats div { display: flex; justify-content: space-between; margin-bottom: 4px; }
         .mini-stats span.val { color: white; font-weight: bold; }
-        .val.error { color: #ff4757 !important; }
+        .val.error { color: var(--error-color) !important; }
 
         .card-actions { display: flex; gap: 8px; width: 100%; }
-        .btn-sm { padding: 8px; font-size: 11px; background-color: #24293e; border: 1px solid #383e56; flex: 1; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; transition: all 0.2s; text-align: center; }
-        .btn-sm.load-btn { background-color: rgba(46, 213, 115, 0.1); border-color: rgba(46, 213, 115, 0.4); color: var(--success-color); }
-        .btn-sm.load-btn:hover { background-color: var(--success-color); color: black; }
-        .btn-sm:hover { background-color: var(--accent-color); border-color: var(--accent-color); }
+        .btn-sm { padding: 8px; font-size: 11px; background-color: #1a2332; border: 1px solid #2a3b52; flex: 1; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; transition: all 0.2s; text-align: center; text-transform: uppercase; }
+        .btn-sm.load-btn { background-color: rgba(0, 195, 182, 0.1); border-color: rgba(0, 195, 182, 0.4); color: var(--accent-color); }
+        .btn-sm.load-btn:hover { background-color: var(--accent-color); color: #000; }
+        .btn-sm:hover { background-color: var(--gold); border-color: var(--gold); color: #000; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 1000; backdrop-filter: blur(5px); align-items: center; justify-content: center; }
-        .modal-content { background-color: var(--card-bg); width: 100%; max-width: 500px; border-radius: 12px; padding: 30px; box-sizing: border-box; border-top: 4px solid var(--accent-color); position: relative; margin: 20px; }
+        /* --- BOTTOM SEARCH SECTION --- */
+        .bottom-section {
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px 20px 80px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .global-loading { background: rgba(19, 26, 34, 0.8); border: 1px solid var(--secondary-color); padding: 12px; border-radius: 8px; max-width: 500px; margin: 0 auto 20px auto; text-align: center; font-size: 0.9rem; color: var(--text-muted); width: 100%; box-sizing: border-box;}
+
+        .search-container { width: 100%; max-width: 500px; margin: 0 auto; }
+        .search-box { display: flex; gap: 10px; }
+        input { flex: 1; padding: 15px; border: 2px solid var(--secondary-color); border-radius: 8px; background-color: var(--card-bg); color: white; font-size: 16px; outline: none; transition: border-color 0.3s; }
+        input:focus { border-color: var(--accent-color); }
+
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; background-color: var(--accent-color); color: #000; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: transform 0.1s, background-color 0.3s; }
+        .btn:hover { background-color: var(--accent-hover); }
+        .btn:active { transform: scale(0.95); }
+
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 2000; backdrop-filter: blur(5px); align-items: center; justify-content: center; }
+        .modal-content { background-color: var(--card-bg); width: 100%; max-width: 500px; border-radius: 12px; padding: 30px; box-sizing: border-box; border-top: 4px solid var(--accent-color); position: relative; margin: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 30px; color: var(--text-muted); cursor: pointer; }
-        .close-modal:hover { color: white; }
-        .modal h2 { margin-top: 0; text-transform: uppercase; color: var(--success-color); }
+        .close-modal:hover { color: var(--error-color); }
+        .modal h2 { margin-top: 0; text-transform: uppercase; color: var(--gold); }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; border-bottom: 1px solid #2f3542; }
+        th, td { padding: 12px; border-bottom: 1px solid var(--secondary-color); }
         th { color: var(--text-muted); text-align: left; font-weight: 600; }
         td { font-weight: bold; text-align: right; }
         td:first-child, th:first-child { text-align: left; }
         .highlight { color: var(--accent-color); }
 
-        .loading { color: var(--text-muted); font-style: italic; text-align: center; padding: 20px 0; }
-        .error-msg { color: var(--accent-color); background: rgba(255, 71, 87, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--accent-color); margin-top: 10px; }
+        .loading { color: var(--accent-color); font-style: italic; text-align: center; padding: 20px 0; font-weight: bold; letter-spacing: 1px;}
+        .error-msg { color: var(--error-color); background: rgba(255, 71, 87, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--error-color); margin-top: 10px; }
+
+        /* Responsive Navbar */
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; gap: 15px; padding: 15px; }
+            .main-title { font-size: 3.5rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="hero">
-        <div class="hero-content">
-            <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. This space serves as our roster gallery to highlight our official team structure, leadership, and community members. Feel free to explore our line-up or look up individual member records.</p>
-            
-            <div class="global-loading">ℹ️ Click "Load Stats" inside any member's card to view their real-time statistics.</div>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-logo">NOTSWEATY</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#roster">Roster</a>
+            <a href="#search">Search</a>
+        </div>
+    </nav>
 
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" id="customUsername" placeholder="Search any player..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
-                    <button class="btn" onclick="fetchLivePlayerStats(document.getElementById('customUsername').value)">Search</button>
-                </div>
-            </div>
+    <!-- HERO SECTION -->
+    <div id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="main-title">NOTSWEATY</h1>
+            <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. This space serves as our roster gallery to highlight our official team structure, leadership, and community members. Feel free to explore our line-up.</p>
         </div>
     </div>
 
-    <div class="roster-section">
+    <!-- ROSTER SECTION -->
+    <div id="roster" class="roster-section">
         <div class="rank-title leader">👑 Clan Leader</div>
         <div id="leader-grid" class="grid grid-leader"></div>
 
@@ -141,6 +223,21 @@
         <div id="members-grid" class="grid grid-members"></div>
     </div>
 
+    <!-- BOTTOM SEARCH SECTION -->
+    <div id="search" class="bottom-section">
+        <div class="rank-title" style="color: var(--accent-color);">🔍 Player Search</div>
+        
+        <div class="global-loading">ℹ️ Click "Load Stats" inside a member's card or use the search below to view live statistics.</div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="customUsername" placeholder="Search any player..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
+                <button class="btn" onclick="fetchLivePlayerStats(document.getElementById('customUsername').value)">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS MODAL -->
     <div id="statsModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
@@ -248,7 +345,7 @@
             if(btn) btn.style.display = "none";
 
             card.querySelector(".style-wlr").innerText = stats.wlr || "0.00";
-            card.querySelector(".style-wlr").style.color = "var(--success-color)";
+            card.querySelector(".style-wlr").style.color = "var(--gold)";
             
             card.querySelector(".style-fkdr").innerText = stats.fkdr || "0.00";
             card.querySelector(".style-fkdr").style.color = "var(--accent-color)";
@@ -312,7 +409,10 @@
                 if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato.");
 
                 liveClanData[username.toLowerCase()] = data;
-                updatePlayerCardUI(username, data.stats);
+                
+                // Aggiorna anche la card se esiste
+                const card = document.getElementById(`card-${username.toLowerCase()}`);
+                if(card) updatePlayerCardUI(username, data.stats);
 
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
