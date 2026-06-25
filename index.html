@@ -28,7 +28,6 @@
             align-items: center;
         }
 
-        /* Trasformazione della sezione Hero in una banda di sfondo con "immagine.jpg" */
         .hero { 
             width: 100%; 
             position: relative;
@@ -193,9 +192,9 @@
                 card.innerHTML = `
                     <div class="player-name">${player}</div>
                     <div class="mini-stats">
-                        <div><span>Wins:</span><span class="val style-wins">-</span></div>
-                        <div><span>Final Kills:</span><span class="val style-fkills">-</span></div>
                         <div><span>WLR:</span><span class="val style-wlr">-</span></div>
+                        <div><span>FKDR:</span><span class="val style-fkdr">-</span></div>
+                        <div><span>KDR:</span><span class="val style-kdr">-</span></div>
                     </div>
                     <div class="card-actions">
                         <button class="btn-sm load-btn" onclick="loadSingleCardStats('${player}')">Load Stats</button>
@@ -247,11 +246,14 @@
             const btn = card.querySelector(".load-btn");
             if(btn) btn.style.display = "none";
 
-            card.querySelector(".style-wins").innerText = stats.wins || "0";
-            card.querySelector(".style-wins").style.color = "var(--success-color)";
-            card.querySelector(".style-fkills").innerText = stats.final_kills || "0";
-            card.querySelector(".style-fkills").style.color = "var(--accent-color)";
+            // Aggiorna le 3 statistiche principali richieste (WLR, FKDR, KDR)
             card.querySelector(".style-wlr").innerText = stats.wlr || "0.00";
+            card.querySelector(".style-wlr").style.color = "var(--success-color)";
+            
+            card.querySelector(".style-fkdr").innerText = stats.fkdr || "0.00";
+            card.querySelector(".style-fkdr").style.color = "var(--accent-color)";
+            
+            card.querySelector(".style-kdr").innerText = stats.kdr || "0.00";
         }
 
         function showErrorOnCardUI(username) {
