@@ -92,7 +92,7 @@
         <h1>NOTSWEATY</h1>
         <p class="tagline">The official showcase and real-time statistics hub of the **NOTSWEATY** Clan.</p>
         
-        <div id="globalStatus" class="global-loading"><span class="spinner">⏳</span> Svegliando il server Render (Può richiedere fino a 60 secondi)...</div>
+        <div id="globalStatus" class="global-loading"><span class="spinner">⏳</span> Sto svegliando il server API su Render...</div>
 
         <div class="search-container">
             <div class="search-box">
@@ -178,45 +178,40 @@
             });
         }
 
-        // FETCH SEMPLICE SENZA TIMEOUT ARTIFICIALI
+        // STRATEGIA ANTIBLOCCO ANTICLOUDFLARE: Invertiamo l'ordine delle chiamate
         async function fetchPlayerData(player) {
             const primaryUrl = `${API_URL}${player}`;
             const fallbackUrl = `${CORS_PROXY}${encodeURIComponent(primaryUrl)}`;
 
-            try {
-                const response = await fetch(primaryUrl);
-                if (response.ok) return await response.json();
-            } catch (e) {
-                console.warn(`[INFO] Connessione diretta fallita per ${player}, provo proxy...`);
-            }
-
+            // Tentativo 1: Proxy Web (Nasconde l'IP di Render simulandone altri sparsi)
             try {
                 const response = await fetch(fallbackUrl);
                 if (response.ok) return await response.json();
             } catch (e) {
-                console.error(`[ERRORE] Entrambi i fetch falliti per ${player}`);
+                console.warn(`[PROXY FAILED] Proxy fallito per ${player}, tento via diretta...`);
+            }
+
+            // Tentativo 2: Connessione Diretta
+            try {
+                const response = await fetch(primaryUrl);
+                if (response.ok) return await response.json();
+            } catch (e) {
+                console.error(`[CRITICAL] Entrambe le rotte fallite per ${player}`);
             }
 
             return null;
         }
 
-        // LOGICA DI AVVIO PRINCIPALE
         async function startSystem() {
             const statusDiv = document.getElementById("globalStatus");
-            
-            // FASE 1: "WAKE UP" DEL SERVER
-            // Facciamo una singola richiesta e aspettiamo tutto il tempo necessario
-            statusDiv.innerHTML = `<span class="spinner">⏳</span> Sto svegliando il server API (Può richiedere fino a 60 secondi)... pazienza!`;
+            statusDiv.innerHTML = `<span class="spinner">⏳</span> Collegamento iniziale sicuro con il server...`;
             
             const firstPlayer = allPlayersList[0]; // Krishiv00
-            
-            // Mettiamo l'icona clessidra su Krishiv
             const primaCard = document.getElementById(`card-${firstPlayer.toLowerCase()}`);
             if(primaCard) primaCard.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
 
             const firstData = await fetchPlayerData(firstPlayer);
             
-            // Il server ora è sveglio (che abbia avuto successo o meno)
             if (firstData && firstData.stats) {
                 liveClanData[firstPlayer.toLowerCase()] = firstData;
                 updatePlayerCardUI(firstPlayer, firstData.stats);
@@ -225,17 +220,15 @@
             }
             
             loadedPlayers++;
-            statusDiv.innerHTML = `⚡ Server Sveglio! Caricamento statistiche... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
+            statusDiv.innerHTML = `⚡ Canale aperto. Sincronizzazione giocatori (Attesa di sicurezza anti-blocco)... <span id="loadCount">${loadedPlayers}</span>/${totalPlayers}`;
 
-            // FASE 2: CARICAMENTO A CASCATA DEGLI ALTRI (Ora che il server è pronto)
+            // FASE 2: CARICAMENTO RALLENTATO A 3.5 SECONDI
             for (let i = 1; i < allPlayersList.length; i++) {
                 const player = allPlayersList[i];
                 
-                // Clessidra sul player corrente
                 const card = document.getElementById(`card-${player.toLowerCase()}`);
                 if(card) card.querySelectorAll(".val").forEach(el => el.innerText = "⏳");
 
-                // Esegue il fetch (senza bloccare la UI perché siamo in asincrono)
                 fetchPlayerData(player).then(data => {
                     if (data && data.stats) {
                         liveClanData[player.toLowerCase()] = data;
@@ -251,13 +244,13 @@
                         statusDiv.style.backgroundColor = "rgba(46, 213, 115, 0.1)";
                         statusDiv.style.borderColor = "var(--success-color)";
                         statusDiv.style.color = "var(--success-color)";
-                        statusDiv.innerHTML = "✅ Statistiche del clan sincronizzate!";
+                        statusDiv.innerHTML = "✅ Tutte le statistiche del clan sono online!";
                         setTimeout(() => { statusDiv.style.display = "none"; }, 5000);
                     }
                 });
 
-                // Attende 800ms prima di far partire la richiesta del prossimo per non sovraccaricare il server
-                await new Promise(resolve => setTimeout(resolve, 800));
+                // Pausa rigorosa di 3500ms tra le chiamate per "ingannare" Cloudflare
+                await new Promise(resolve => setTimeout(resolve, 3500));
             }
         }
 
@@ -326,7 +319,7 @@
 
             try {
                 const data = await fetchPlayerData(username);
-                if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato o API spenta.");
+                if (!data || data.errore) throw new Error(data?.messaggio || "Giocatore non trovato.");
 
                 document.getElementById("res-player").innerText = data.giocatore;
                 document.getElementById("stat-wins").innerText = data.stats.wins;
@@ -354,7 +347,7 @@
 
         window.onload = function() {
             buildInitialGrids();
-            startSystem(); // Fa partire il sistema
+            startSystem();
         };
     </script>
 </body>
