@@ -28,20 +28,46 @@
             align-items: center;
         }
 
-        .hero { width: 100%; max-width: 1000px; text-align: center; padding: 60px 20px 40px 20px; box-sizing: border-box; }
-        .hero h1 { font-size: 3.5rem; color: var(--accent-color); margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 20px rgba(255, 71, 87, 0.4); }
-        .hero p.tagline { font-size: 1.15rem; color: var(--text-muted); max-width: 750px; margin: 0 auto 30px auto; line-height: 1.7; }
+        /* Trasformazione della sezione Hero in una banda di sfondo con "immagine.jpg" */
+        .hero { 
+            width: 100%; 
+            position: relative;
+            background-image: linear-gradient(rgba(10, 12, 20, 0.6), rgba(10, 12, 20, 0.9)), url('immagine.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center; 
+            padding: 100px 20px 60px 20px; 
+            box-sizing: border-box; 
+            border-bottom: 2px solid #1e2235;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-        .search-container { width: 100%; max-width: 500px; margin: 0 auto 40px auto; }
+        .hero p.tagline { 
+            font-size: 1.2rem; 
+            color: #ffffff; 
+            max-width: 750px; 
+            margin: 0 auto 30px auto; 
+            line-height: 1.7; 
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .search-container { width: 100%; max-width: 500px; margin: 0 auto 20px auto; }
         .search-box { display: flex; gap: 10px; }
-        input { flex: 1; padding: 15px; border: 2px solid #1e2235; border-radius: 8px; background-color: var(--card-bg); color: white; font-size: 16px; outline: none; transition: border-color 0.3s; }
+        input { flex: 1; padding: 15px; border: 2px solid #1e2235; border-radius: 8px; background-color: rgba(19, 23, 34, 0.85); color: white; font-size: 16px; outline: none; backdrop-filter: blur(5px); transition: border-color 0.3s; }
         input:focus { border-color: var(--accent-color); }
 
         .btn { padding: 12px 24px; border: none; border-radius: 8px; background-color: var(--accent-color); color: white; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: transform 0.1s, background-color 0.3s; }
         .btn:hover { background-color: var(--accent-hover); }
         .btn:active { transform: scale(0.95); }
 
-        .global-loading { background: rgba(30, 34, 53, 0.6); border: 1px solid #1e2235; padding: 15px; border-radius: 8px; max-width: 500px; margin: 0 auto 30px auto; text-align: center; font-size: 0.95rem; color: var(--text-muted); }
+        .global-loading { background: rgba(19, 23, 34, 0.9); border: 1px solid #1e2235; padding: 12px; border-radius: 8px; max-width: 500px; margin: 0 auto 20px auto; text-align: center; font-size: 0.9rem; color: var(--text-muted); backdrop-filter: blur(5px); }
 
         .roster-section { width: 100%; max-width: 1000px; padding: 0 20px 60px 20px; box-sizing: border-box; }
         .rank-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; margin: 50px 0 25px 0; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -90,16 +116,16 @@
 <body>
 
     <div class="hero">
-        <h1>NOTSWEATY</h1>
-        <!-- Descrizione accurata incentrata sullo Showcase del Clan -->
-        <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. This space serves as our roster gallery to highlight our official team structure, leadership, and community members. Feel free to explore our line-up or look up individual member records.</p>
-        
-        <div class="global-loading">ℹ️ Click "Load Stats" inside any member's card to view their real-time statistics.</div>
+        <div class="hero-content">
+            <p class="tagline">Welcome to the official showcase hub of the <strong>NOTSWEATY</strong> Clan. This space serves as our roster gallery to highlight our official team structure, leadership, and community members. Feel free to explore our line-up or look up individual member records.</p>
+            
+            <div class="global-loading">ℹ️ Click "Load Stats" inside any member's card to view their real-time statistics.</div>
 
-        <div class="search-container">
-            <div class="search-box">
-                <input type="text" id="customUsername" placeholder="Search any player..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
-                <button class="btn" onclick="fetchLivePlayerStats(document.getElementById('customUsername').value)">Search</button>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="customUsername" placeholder="Search any player..." onkeydown="if(event.key === 'Enter') fetchLivePlayerStats(document.getElementById('customUsername').value)">
+                    <button class="btn" onclick="fetchLivePlayerStats(document.getElementById('customUsername').value)">Search</button>
+                </div>
             </div>
         </div>
     </div>
@@ -118,7 +144,6 @@
     <div id="statsModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="document.getElementById('statsModal').style.display = 'none'">&times;</span>
-            <!-- Nuova stringa richiesta: Loading stats, please wait... -->
             <div id="modalLoading" class="loading">Loading stats, please wait...</div>
             <div id="modalError" class="error-msg" style="display:none;"></div>
             
@@ -203,7 +228,6 @@
             if (!card) return;
 
             const spans = card.querySelectorAll(".val");
-            // Stringa richiesta per il caricamento sulla scheda
             spans.forEach(span => { span.innerText = "Loading..."; span.classList.remove("error"); });
 
             const data = await fetchPlayerData(username);
