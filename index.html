@@ -38,8 +38,6 @@
             overflow-x: hidden;
         }
 
-
-
         /* ─── NAVBAR ─── */
         .navbar {
             width: 100%;
@@ -185,14 +183,6 @@
             margin-bottom: 48px;
         }
         .hero-sub strong { color: var(--text); }
-        .hero-stats {
-            display: flex;
-            gap: 32px;
-            position: relative;
-            z-index: 1;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
         .hero-stats {
             display: flex;
             gap: 32px;
@@ -382,6 +372,47 @@
         .lb-bar-cell { width: 30%; }
         .lb-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 6px; overflow: hidden; }
         .lb-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cyan), var(--cyan-bright)); transition: width 0.6s ease; }
+
+        /* ─── SEASON ACCORDION ─── */
+        .season-dropdown {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+        .season-dropdown[open] {
+            border-color: var(--border-bright);
+            box-shadow: 0 8px 24px rgba(0,195,182,0.05);
+        }
+        .season-summary {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 16px;
+            cursor: pointer;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            user-select: none;
+        }
+        .season-summary::-webkit-details-marker { display: none; }
+        .season-summary::after {
+            content: '▼';
+            font-size: 0.8rem;
+            color: var(--cyan);
+            transition: transform 0.2s;
+        }
+        .season-dropdown[open] .season-summary::after {
+            transform: rotate(180deg);
+        }
+        .season-content {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            overflow-x: auto;
+        }
 
         /* ─── ROSTER ─── */
         .rank-divider {
@@ -711,6 +742,7 @@
     <div class="nav-links">
         <a href="#about">About</a>
         <a href="#leaderboard">Leaderboard</a>
+        <a href="#season-stats">Season Stats</a>
         <a href="#roster">Roster</a>
         <a href="#news">News</a>
         <a href="#media">Media</a>
@@ -771,6 +803,49 @@
         <div id="lb-table-wrap">
             <div class="lb-loading">Click "Load All Stats" to fetch live rankings from the API.</div>
         </div>
+    </div>
+</div>
+
+<!-- CLAN SEASON STATS (NEW DROP-DOWN SECTION) -->
+<div id="season-stats" class="full-width-section">
+    <div class="section">
+        <div class="section-eyebrow">Historical Archives</div>
+        <div class="section-title" style="margin-bottom: 24px;">Clan Season <span class="cyan">Stats</span></div>
+        
+        <details class="season-dropdown">
+            <summary class="season-summary">
+                <span>Season #57, 20526</span>
+            </summary>
+            <div class="season-content">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Contributor</th>
+                            <th style="text-align: right;">Points / Score</th>
+                            <th style="text-align: right;">Wins</th>
+                            <th style="text-align: right;">Win Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Krishiv</td><td class="highlight" style="text-align: right;">4718</td><td style="text-align: right;">456</td><td style="text-align: right; color: var(--gold);">92.87%</td></tr>
+                        <tr><td>ManuelCCTV</td><td class="highlight" style="text-align: right;">3659</td><td style="text-align: right;">399</td><td style="text-align: right; color: var(--gold);">95.68%</td></tr>
+                        <tr><td>Noot_Penguin</td><td class="highlight" style="text-align: right;">3104</td><td style="text-align: right;">390</td><td style="text-align: right; color: var(--gold);">84.97%</td></tr>
+                        <tr><td>luca05</td><td class="highlight" style="text-align: right;">1942</td><td style="text-align: right;">228</td><td style="text-align: right; color: var(--gold);">81.72%</td></tr>
+                        <tr><td>Valerioita</td><td class="highlight" style="text-align: right;">1901</td><td style="text-align: right;">267</td><td style="text-align: right; color: var(--gold);">89.6%</td></tr>
+                        <tr><td>iDesk76</td><td class="highlight" style="text-align: right;">1583</td><td style="text-align: right;">142</td><td style="text-align: right; color: var(--gold);">80.23%</td></tr>
+                        <tr><td>Skengdo_OG</td><td class="highlight" style="text-align: right;">1388</td><td style="text-align: right;">169</td><td style="text-align: right; color: var(--gold);">94.41%</td></tr>
+                        <tr><td>grumen</td><td class="highlight" style="text-align: right;">809</td><td style="text-align: right;">102</td><td style="text-align: right; color: var(--gold);">86.44%</td></tr>
+                        <tr><td>_Zenux</td><td class="highlight" style="text-align: right;">416</td><td style="text-align: right;">62</td><td style="text-align: right; color: var(--gold);">92.54%</td></tr>
+                        <tr><td>Kwra</td><td class="highlight" style="text-align: right;">157</td><td style="text-align: right;">21</td><td style="text-align: right; color: var(--gold);">95.45%</td></tr>
+                        <tr><td>Whish3</td><td class="highlight" style="text-align: right;">80</td><td style="text-align: right;">22</td><td style="text-align: right; color: var(--gold);">78.57%</td></tr>
+                        <tr><td>Iamfamousfortime</td><td class="highlight" style="text-align: right;">25</td><td style="text-align: right;">10</td><td style="text-align: right; color: var(--gold);">76.92%</td></tr>
+                        <tr><td>Massimo00875</td><td class="highlight" style="text-align: right;">7</td><td style="text-align: right;">1</td><td style="text-align: right; color: var(--gold);">100.0%</td></tr>
+                        <tr><td>Thaazin</td><td class="highlight" style="text-align: right;">2</td><td style="text-align: right;">3</td><td style="text-align: right; color: var(--gold);">60.0%</td></tr>
+                        <tr><td>Rock_Gamer</td><td class="highlight" style="text-align: right; color: var(--red);">-18</td><td style="text-align: right;">3</td><td style="text-align: right; color: var(--gold);">75.0%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </details>
     </div>
 </div>
 
