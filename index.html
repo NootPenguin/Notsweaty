@@ -278,45 +278,7 @@
             margin-bottom: 40px;
         }
 
-        /* ─── LEADERBOARD ─── */
-        .lb-controls {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .lb-btn {
-            padding: 8px 18px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--muted);
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-        .lb-btn:hover, .lb-btn.active {
-            background: rgba(0,195,182,0.1);
-            border-color: var(--border-bright);
-            color: var(--cyan);
-        }
-        .lb-load-btn {
-            padding: 10px 22px;
-            border-radius: 8px;
-            border: 1px solid var(--border-bright);
-            background: rgba(0,195,182,0.1);
-            color: var(--cyan);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .lb-load-btn:hover { background: var(--cyan); color: #000; }
-        .lb-load-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
+        /* ─── TABLES ─── */
         .leaderboard-table {
             width: 100%;
             border-collapse: collapse;
@@ -333,7 +295,6 @@
         .leaderboard-table tbody tr {
             border-bottom: 1px solid var(--border);
             transition: background 0.15s;
-            cursor: pointer;
         }
         .leaderboard-table tbody tr:hover { background: var(--card-hover); }
         .leaderboard-table td {
@@ -341,18 +302,6 @@
             font-size: 0.9rem;
             color: var(--text);
         }
-        .lb-rank {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            width: 48px;
-            text-align: center;
-        }
-        .lb-rank.r1 { color: var(--gold); }
-        .lb-rank.r2 { color: var(--silver); }
-        .lb-rank.r3 { color: #cd7f32; }
-        .lb-rank.other { color: var(--muted2); }
-        .lb-player { font-weight: 600; }
         .lb-role-pill {
             display: inline-block;
             padding: 2px 10px;
@@ -366,12 +315,7 @@
         .pill-leader { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(240,180,41,0.3); }
         .pill-commander { background: rgba(206,214,224,0.1); color: var(--silver); border: 1px solid rgba(206,214,224,0.25); }
         .pill-member { background: rgba(0,195,182,0.08); color: var(--cyan); border: 1px solid var(--border-bright); }
-        .lb-value { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--cyan); text-align: right; }
-        .lb-value.gold { color: var(--gold); }
-        .lb-loading { text-align: center; padding: 40px; color: var(--muted); font-size: 0.9rem; }
-        .lb-bar-cell { width: 30%; }
-        .lb-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 6px; overflow: hidden; }
-        .lb-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cyan), var(--cyan-bright)); transition: width 0.6s ease; }
+        .highlight { color: var(--cyan); }
 
         /* ─── SEASON ACCORDION ─── */
         .season-dropdown {
@@ -707,7 +651,6 @@
         th { color: var(--muted); text-align: left; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         td { font-weight: 600; text-align: right; font-size: 0.9rem; }
         td:first-child, th:first-child { text-align: left; }
-        .highlight { color: var(--cyan); }
         .loading { color: var(--cyan); text-align: center; padding: 30px 0; font-size: 0.9rem; font-style: italic; }
         .error-msg { color: var(--red); background: rgba(255,71,87,0.08); padding: 14px; border-radius: 8px; border: 1px solid rgba(255,71,87,0.3); margin-top: 10px; font-size: 0.88rem; }
 
@@ -741,7 +684,6 @@
     <div class="nav-logo">NOTSWEATY</div>
     <div class="nav-links">
         <a href="#about">About</a>
-        <a href="#leaderboard">Leaderboard</a>
         <a href="#season-stats">Season Stats</a>
         <a href="#roster">Roster</a>
         <a href="#news">News</a>
@@ -782,31 +724,7 @@
     </div>
 </div>
 
-<!-- LEADERBOARD -->
-<div id="leaderboard" class="full-width-section">
-    <div class="section">
-        <div class="section-eyebrow">Internal Rankings</div>
-        <div class="section-header-row">
-            <div>
-                <div class="section-title">Clan <span class="gold">Leaderboard</span></div>
-            </div>
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                <div class="lb-controls" id="lb-controls">
-                    <button class="lb-btn active" onclick="setLbStat('fkdr')">FKDR</button>
-                    <button class="lb-btn" onclick="setLbStat('wlr')">WLR</button>
-                    <button class="lb-btn" onclick="setLbStat('wins')">Wins</button>
-                    <button class="lb-btn" onclick="setLbStat('final_kills')">Final Kills</button>
-                </div>
-                <button class="lb-load-btn" id="lb-load-btn" onclick="loadLeaderboard()">⚡ Load All Stats</button>
-            </div>
-        </div>
-        <div id="lb-table-wrap">
-            <div class="lb-loading">Click "Load All Stats" to fetch live rankings from the API.</div>
-        </div>
-    </div>
-</div>
-
-<!-- CLAN SEASON STATS (NEW DROP-DOWN SECTION) -->
+<!-- CLAN SEASON STATS -->
 <div id="season-stats" class="full-width-section">
     <div class="section">
         <div class="section-eyebrow">Historical Archives</div>
@@ -814,14 +732,14 @@
         
         <details class="season-dropdown">
             <summary class="season-summary">
-                <span>Season #57, 20526</span>
+                <span>Season #57, 20526 🏆</span>
             </summary>
             <div class="season-content">
                 <table class="leaderboard-table">
                     <thead>
                         <tr>
                             <th>Contributor</th>
-                            <th style="text-align: right;">Points / Score</th>
+                            <th style="text-align: right;">🏆 Trophies</th>
                             <th style="text-align: right;">Wins</th>
                             <th style="text-align: right;">Win Rate</th>
                         </tr>
@@ -886,19 +804,19 @@
         <div class="news-grid">
             <div class="news-card">
                 <div class="news-meta">
-                    <span class="news-tag tag-event">Event</span>
-                    <span class="news-date">May 2025</span>
+                    <span class="news-tag tag-new">Dominance</span>
+                    <span class="news-date">June 2026</span>
                 </div>
-                <div class="news-title">Internal 1v1 Tournament — Results</div>
-                <div class="news-body">Our first internal bracket wrapped up with fierce competition. Congratulations to all participants. Stay tuned for the next edition — we're making it bigger.</div>
+                <div class="news-title">Jartex Leaderboards Dominated!</div>
+                <div class="news-body">Durante l'ultima settimana di giugno, il clan NOTSWEATY ha letteralmente conquistato i vertici delle leaderboard di Jartex Network. Grazie allo sforzo incredibile di tutti i membri e a una striscia di vittorie devastante, abbiamo dimostrato chi comanda. Ottimo lavoro a tutti i contributor!</div>
             </div>
             <div class="news-card">
                 <div class="news-meta">
                     <span class="news-tag tag-update">Update</span>
-                    <span class="news-date">April 2025</span>
+                    <span class="news-date">April 2026</span>
                 </div>
                 <div class="news-title">Site relaunch with live stats</div>
-                <div class="news-body">The official NOTSWEATY hub is live with real-time stat lookups, a dynamic internal leaderboard, and recruitment info. More features are on the way.</div>
+                <div class="news-body">The official NOTSWEATY hub is live with real-time stat lookups, historical records, and recruitment info. More features are on the way.</div>
             </div>
         </div>
     </div>
@@ -1017,7 +935,7 @@
 
 <!-- FOOTER -->
 <footer>
-    <span>NOTSWEATY</span> · BedWars Clan · Jartex Network · 2025
+    <span>NOTSWEATY</span> · BedWars Clan · Jartex Network · 2026
 </footer>
 
 <!-- STATS MODAL -->
@@ -1055,15 +973,7 @@ const clanRoles = {
     members:    ["ISoloQ", "Rock_Gamer", "gingeler39", "Capta1nLeViI", "Whish3", "Thaazin", "_Mimero_", "Vexral0", "Skengdo_OG", "grumen", "iDesk76", "Kosticcc", "systaltic", "Ghostqx", "_Zenux", "Kwra", "luca05", "ManuelCCTV", "Iamfamousfortime"]
 };
 
-const allPlayers = [
-    ...clanRoles.leader.map(n=>({name:n,role:"leader"})),
-    ...clanRoles.commanders.map(n=>({name:n,role:"commander"})),
-    ...clanRoles.members.map(n=>({name:n,role:"member"}))
-];
-
 let liveClanData = {};
-let currentLbStat = "fkdr";
-let lbLoaded = false;
 
 /* ─── FETCH ─── */
 async function fetchPlayerData(player) {
@@ -1116,7 +1026,6 @@ async function loadSingleCardStats(username) {
     if (data && data.stats) {
         liveClanData[username.toLowerCase()] = data;
         updatePlayerCardUI(username, data.stats);
-        if (lbLoaded) renderLeaderboard();
     } else {
         showErrorOnCardUI(username);
     }
@@ -1139,106 +1048,6 @@ function showErrorOnCardUI(username) {
     const card = document.getElementById(`card-${username.toLowerCase()}`);
     if (!card) return;
     card.querySelectorAll(".val").forEach(s => { s.innerText = "ERR"; s.classList.add("error"); });
-}
-
-/* ─── LEADERBOARD ─── */
-function setLbStat(stat) {
-    currentLbStat = stat;
-    document.querySelectorAll(".lb-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".lb-btn").forEach(b => {
-        if (b.textContent.toLowerCase().replace(/[^a-z_]/g,'') === stat.replace(' ','_').toLowerCase() ||
-            b.onclick.toString().includes(`'${stat}'`)) b.classList.add("active");
-    });
-    if (lbLoaded) renderLeaderboard();
-}
-
-document.querySelectorAll(".lb-btn").forEach(btn => {
-    btn.addEventListener("click", function() {
-        document.querySelectorAll(".lb-btn").forEach(b=>b.classList.remove("active"));
-        this.classList.add("active");
-    });
-});
-
-async function loadLeaderboard() {
-    const btn = document.getElementById("lb-load-btn");
-    btn.disabled = true;
-    btn.textContent = "Loading…";
-    const wrap = document.getElementById("lb-table-wrap");
-    wrap.innerHTML = '<div class="lb-loading">Fetching stats for all members…</div>';
-
-    const fetches = allPlayers.map(async p => {
-        const data = await fetchPlayerData(p.name);
-        if (data && data.stats) {
-            liveClanData[p.name.toLowerCase()] = data;
-            updatePlayerCardUI(p.name, data.stats);
-        }
-        return { ...p, data };
-    });
-
-    await Promise.all(fetches);
-    lbLoaded = true;
-    btn.textContent = "↻ Refresh";
-    btn.disabled = false;
-    renderLeaderboard();
-}
-
-function getStatValue(data, stat) {
-    if (!data || !data.stats) return null;
-    const s = data.stats;
-    const map = { fkdr:'fkdr', wlr:'wlr', wins:'wins', final_kills:'final_kills', kdr:'kdr' };
-    const key = map[stat] || stat;
-    const v = s[key];
-    return v !== undefined ? parseFloat(v) : null;
-}
-
-function renderLeaderboard() {
-    const rows = allPlayers.map(p => {
-        const d = liveClanData[p.name.toLowerCase()];
-        return { ...p, val: getStatValue(d, currentLbStat) };
-    }).filter(r => r.val !== null).sort((a,b) => b.val - a.val);
-
-    if (!rows.length) {
-        document.getElementById("lb-table-wrap").innerHTML = '<div class="lb-loading">No stats loaded yet.</div>';
-        return;
-    }
-
-    const maxVal = rows[0].val || 1;
-    const pillMap = { leader: 'pill-leader', commander: 'pill-commander', member: 'pill-member' };
-    const pillLabel = { leader: 'Leader', commander: 'Commander', member: 'Member' };
-    const statLabel = { fkdr:'FKDR', wlr:'WLR', wins:'Wins', final_kills:'Final Kills', kdr:'KDR' };
-
-    let html = `
-        <table class="leaderboard-table">
-        <thead>
-            <tr>
-                <th style="width:48px;">#</th>
-                <th>Player</th>
-                <th style="text-align:right;">${statLabel[currentLbStat] || currentLbStat}</th>
-                <th class="lb-bar-cell" style="text-align:right;">Chart</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
-
-    rows.forEach((r, i) => {
-        const rank = i + 1;
-        const rankClass = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : 'other';
-        const rankIcon  = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
-        const pct = Math.round((r.val / maxVal) * 100);
-        const isFloat = currentLbStat !== 'wins' && currentLbStat !== 'final_kills';
-        const display = isFloat ? r.val.toFixed(2) : Math.round(r.val).toLocaleString();
-        html += `
-            <tr onclick="showPlayerDetails('${r.name}')">
-                <td><span class="lb-rank ${rankClass}">${rankIcon}</span></td>
-                <td class="lb-player">${r.name}<span class="lb-role-pill ${pillMap[r.role]}">${pillLabel[r.role]}</span></td>
-                <td class="lb-value ${currentLbStat === 'wins' || currentLbStat === 'final_kills' ? 'gold' : ''}">${display}</td>
-                <td class="lb-bar-cell"><div class="lb-bar-wrap"><div class="lb-bar" style="width:${pct}%"></div></div></td>
-            </tr>
-        `;
-    });
-
-    html += '</tbody></table>';
-    document.getElementById("lb-table-wrap").innerHTML = html;
 }
 
 /* ─── MODAL ─── */
